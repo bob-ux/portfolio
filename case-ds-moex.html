@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Дизайн-система — Московская Биржа</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+<div id="site-header"></div>
+
+<main>
+  <div class="container">
+
+    <section class="case-hero">
+      <h1>Дизайн-система Московская Биржа</h1>
+      <p class="subtitle">Дизайн-система для внутренних и публичных аналитических продуктов Московской Биржи, используемая несколькими командами</p>
+
+      <div class="case-meta">
+        <div class="kv"><b>Роль</b><span>Senior UX/UI Designer</span></div>
+        <div class="kv"><b>Продукт</b><span>Design system</span></div>
+        <div class="kv"><b>Пользователи</b><span>Дизайнеры, продуктовые команды, разработчики</span></div>
+      </div>
+
+
+    </section>
+
+    <div class="case-layout">
+      <aside class="card toc">
+        <h4>Содержание</h4>
+        <a href="#summary">Резюме</a>
+        <a href="#context">Контекст</a>
+        <a href="#role">Роль</a>
+        <a href="#challenges">UX-вызовы</a>
+        <a href="#solutions">Решения</a>
+        <a href="#components">Компоненты дизайн-системы</a>
+        <a href="#results">Результаты</a>
+        <a href="#takeaways">Выводы</a>
+      </aside>
+
+
+      <div class="content">
+
+        <section id="summary">
+          <h2>Резюме</h2>
+          <div class="card card-pad summary">
+            <div class="row"><span class="dot"></span><div>Развивал масштабируемую дизайн-систему для внутренних продуктов Мосбиржи.</div></div>
+            <div class="row"><span class="dot"></span><div>Покрытие: аналитические интерфейсы, торговые платформы, сервисные экраны.</div></div>
+            <div class="row"><span class="dot"></span><div>Цель: консистентность и масштабирование в условиях нескольких команд и продуктов.</div></div>
+            <div class="row"><span class="dot"></span><div>Ограничения: enterprise-среда, высокая ответственность, совместимость и стандарты.</div></div>
+            <div class="row"><span class="dot"></span><div>Мой вклад: UX-архитектура, компоненты, правила, документация и поддержка внедрения.</div></div>
+          </div>
+        </section>
+
+        <section id="context">
+          <h2>Контекст и проблема</h2>
+          <p>
+            Внутренние аналитические продукты развиваются параллельно разными командами. Без единой системы компонентов и правил
+            интерфейсы расходятся: появляются разные паттерны, неоднозначные состояния, различная логика таблиц и форм.
+          </p>
+          <div class="callout">
+            Интерфейсы развивались несистемно и требовали высокой стоимости поддержки
+          </div>
+        </section>
+
+        <section id="role">
+          <h2>Роль</h2>
+          <ul>
+            <li>Собирал и уточнял требования от продуктовых команд</li>
+            <li>Анализировал контекст использования компонентов</li>
+            <li>Прорабатывал пользовательские сценарии</li>
+            <li>Проводил короткие интервью с командами</li>
+            <li>Принимал и приоритизировал запросы на новые компоненты</li>
+            <li>Адаптировал решения под реальные задачи продуктов</li>
+          </ul>
+        </section>
+
+        <section id="challenges">
+          <h2>UX-вызовы</h2>
+          <ul>
+            <li>Высокая плотность данных и сложные аналитические сценарии.</li>
+            <li>Несколько команд и разные ожидания стейкхолдеров.</li>
+            <li>Баланс гибкости и строгой стандартизации.</li>
+            <li>Долгосрочная масштабируемость и совместимость.</li>
+          </ul>
+        </section>
+
+        <section id="solutions">
+          <h2>Решения</h2>
+          <!--<p class="small">Показывай “группами” — это выглядит системно и читается быстрее.</p>-->
+
+          <div class="grid-2">
+            <div class="card card-pad">
+              <h3>Архитектура и стандартизация</h3>
+              <ul>
+                <li>Выстроена иерархия компонентов: базовые элементы → паттерны → сложные блоки.</li>
+                <li>Стандартизированы таблицы и сценарии работы с данными (сортировка, фильтры, состояния).</li>
+                <li>Зафиксированы единые правила пустых состояний и ошибок.</li>
+              </ul>
+            </div>
+
+            <div class="card card-pad">
+              <h3>Токены и документация</h3>
+              <ul>
+                <li>Унифицированы токены (цвет, типографика, отступы, размеры) и состояния компонентов.</li>
+                <li>Документация оформлена как единый источник правил для дизайнеров и разработки.</li>
+                <li>Система стала масштабируемой и пригодной для внедрения в нескольких продуктах.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+
+        <section id="design-decisions">
+          <h2>Дизайн-решения</h2>
+          <p class="small">Проблема → Решение → Влияние</p>
+
+          <div class="grid-2">
+            <div class="card card-pad">
+              <h3>Унификация паттернов таблиц</h3>
+              <ul>
+                <li><b>Проблема:</b> разные реализации таблиц и непредсказуемая логика взаимодействия.</li>
+                <li><b>Решение:</b> стандартизировать таблицы как базовый паттерн дизайн-системы.</li>
+                <li><b>Влияние:</b> снижение когнитивной нагрузки и ускорение внедрения в продуктах.</li>
+              </ul>
+            </div>
+
+            <div class="card card-pad">
+              <h3>Стандартизация состояний компонентов</h3>
+              <ul>
+                <li><b>Проблема:</b> несогласованные состояния элементов и визуальные расхождения.</li>
+                <li><b>Решение:</b> зафиксировать обязательный набор состояний для каждого интерактивного компонента.</li>
+                <li><b>Влияние:</b> снижение количества UI-ошибок и меньше уточнений со стороны разработки.</li>
+              </ul>
+            </div>
+
+            <div class="card card-pad">
+              <h3>Разделение базовых элементов и продуктовой логики</h3>
+              <ul>
+                <li><b>Проблема:</b> перегрузка компонентов специфическими требованиями отдельных платформ.</li>
+                <li><b>Решение:</b> разделить универсальные элементы и продуктовые сценарии.</li>
+                <li><b>Влияние:</b> система стала масштабируемой и устойчивой к росту.</li>
+              </ul>
+            </div>
+
+            <div class="card card-pad">
+              <h3>Документация</h3>
+              <ul>
+                <li><b>Проблема:</b> компоненты использовались по-разному из-за отсутствия единых правил.</li>
+                <li><b>Решение:</b> документация создаётся одновременно с компонентом и является частью релиза.</li>
+                <li><b>Влияние:</b> консистентное применение системы в командах.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="components">
+          <h2>Компоненты дизайн-системы</h2>
+          <p class="small">Разделено по категориям, чтобы не перегружать страницу.</p>
+
+          <!-- Filters -->
+          <div class="filter-bar" role="tablist" aria-label="Категории компонентов">
+            <button class="filter-btn is-active" type="button" role="tab" aria-selected="true" data-filter="all">
+              Все <span class="filter-count"></span>
+            </button>
+            <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="inputs">
+              Ввод <span class="filter-count"></span>
+            </button>
+            <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="navigation">
+              Навигация <span class="filter-count"></span>
+            </button>
+            <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="actions">
+              Кнопки <span class="filter-count"></span>
+            </button>
+            <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="status">
+              Статусы <span class="filter-count"></span>
+            </button>
+            <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="overlays">
+              Наложения <span class="filter-count"></span>
+            </button>
+            <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="other">
+              Другое <span class="filter-count"></span>
+            </button>
+          </div>
+
+          <!-- Grid -->
+          <div class="grid-3 component-grid" id="component-grid">
+            <!-- Добавляй/копируй эти элементы и меняй data-cat + src + alt -->
+            <!--<div class="media component-item" data-cat="inputs overview"> Добавить код к тем компонентам, которые хочу показать во вкладке все--> 
+            
+            <!--Ввод-->
+
+            <div class="media component-item" data-cat="inputs overview">
+              <img src="assets/img/case-ds-moex/Input.jpg" alt="Input" loading="lazy">
+              <div class="media-caption">Input</div>
+            </div>
+
+             <div class="media component-item" data-cat="inputs">
+              <img src="assets/img/case-ds-moex/Seleсt.jpg" alt="Seleсt" loading="lazy">
+              <div class="media-caption">Seleсt</div>
+            </div>
+
+            <div class="media component-item" data-cat="inputs overview">
+              <img src="assets/img/case-ds-moex/Text Area.jpg" alt="Textarea" loading="lazy">
+              <div class="media-caption">Textarea</div>
+            </div>
+
+            <div class="media component-item" data-cat="inputs overview">
+              <img src="assets/img/case-ds-moex/Input Number.jpg" alt="Input Number" loading="lazy">
+              <div class="media-caption">Input Number</div>
+            </div>
+
+            <!--Навигация-->
+
+            <div class="media component-item" data-cat="navigation">
+              <img src="assets/img/case-ds-moex/Tab.jpg" alt="Tab" loading="lazy">
+              <div class="media-caption">Tabs</div>
+            </div>
+
+            <div class="media component-item" data-cat="navigation overview">
+              <img src="assets/img/case-ds-moex/Pagination.jpg" alt="Pagination" loading="lazy">
+              <div class="media-caption">Pagination</div>
+            </div>
+
+            <div class="media component-item" data-cat="navigation">
+              <img src="assets/img/case-ds-moex/Side Menu.jpg" alt="Side Menu" loading="lazy">
+              <div class="media-caption">Side Menu</div>
+            </div>
+
+            <div class="media component-item" data-cat="navigation">
+              <img src="assets/img/case-ds-moex/Breadcrumb.jpg" alt="Breadcrumb" loading="lazy">
+              <div class="media-caption">Breadcrumb</div>
+            </div>
+
+            <div class="media component-item" data-cat="navigation">
+              <img src="assets/img/case-ds-moex/Bottom Navigation.jpg" alt="Bottom Navigation" loading="lazy">
+              <div class="media-caption">Bottom Navigation</div>
+            </div>
+
+            <!--Кнопки-->
+
+            <div class="media component-item" data-cat="actions">
+              <img src="assets/img/case-ds-moex/Button.jpg" alt="Button" loading="lazy">
+              <div class="media-caption">Button</div>
+            </div>
+
+            <div class="media component-item" data-cat="actions">
+              <img src="assets/img/case-ds-moex/Button Group.jpg" alt="Button Group" loading="lazy">
+              <div class="media-caption">Button Group</div>
+            </div>
+
+            <div class="media component-item" data-cat="actions">
+              <img src="assets/img/case-ds-moex/Action Toast.jpg" alt="Action Toast" loading="lazy">
+              <div class="media-caption">Action Toast</div>
+            </div>
+
+            <div class="media component-item" data-cat="actions overview">
+              <img src="assets/img/case-ds-moex/Float button.jpg" alt="Float button" loading="lazy">
+              <div class="media-caption">Float button</div>
+            </div>
+            
+            
+
+            <!--Статусы-->
+
+            <div class="media component-item" data-cat="status overview">
+              <img src="assets/img/case-ds-moex/Alert.jpg" alt="Alert" loading="lazy">
+              <div class="media-caption">Alert</div>
+            </div>
+
+            <div class="media component-item" data-cat="status">
+              <img src="assets/img/case-ds-moex/Notification.jpg" alt="Notification" loading="lazy">
+              <div class="media-caption">Notification</div>
+            </div>
+
+            <div class="media component-item" data-cat="status">
+              <img src="assets/img/case-ds-moex/Loader.jpg" alt="Loader" loading="lazy">
+              <div class="media-caption">Loader</div>
+            </div>  
+
+            <div class="media component-item" data-cat="status">
+              <img src="assets/img/case-ds-moex/Progress bar.jpg" alt="Progress bar" loading="lazy">
+              <div class="media-caption">Progress bar</div>
+            </div>
+
+            <div class="media component-item" data-cat="status">
+              <img src="assets/img/case-ds-moex/Bage.jpg" alt="Bage" loading="lazy">
+              <div class="media-caption">Bage</div>
+            </div>
+
+            <div class="media component-item" data-cat="status">
+              <img src="assets/img/case-ds-moex/Tooltip.jpg" alt="Tooltip" loading="lazy">
+              <div class="media-caption">Tooltip</div>
+            </div>
+
+            <div class="media component-item" data-cat="status">
+              <img src="assets/img/case-ds-moex/Skeleton.jpg" alt="Skeleton" loading="lazy">
+              <div class="media-caption">Skeleton</div>
+            </div>
+
+            <div class="media component-item" data-cat="status">
+              <img src="assets/img/case-ds-moex/Divider.jpg" alt="Divider" loading="lazy">
+              <div class="media-caption">Divider</div>
+            </div>
+
+            <!--Модал-->
+
+            <div class="media component-item" data-cat="overlays">
+              <img src="assets/img/case-ds-moex/Modal.jpg" alt="Modal" loading="lazy">
+              <div class="media-caption">Modal</div>
+            </div>
+
+            <div class="media component-item" data-cat="overlays">
+              <img src="assets/img/case-ds-moex/Drawer.jpg" alt="Drawer" loading="lazy">
+              <div class="media-caption">Drawer</div>
+            </div>
+
+            <div class="media component-item" data-cat="overlays">
+              <img src="assets/img/case-ds-moex/Popover.jpg" alt="Popover" loading="lazy">
+              <div class="media-caption">Popover</div>
+            </div>
+
+            <div class="media component-item" data-cat="overlays overview">
+              <img src="assets/img/case-ds-moex/Bottom Sheet.jpg" alt="Bottom Sheet" loading="lazy">
+              <div class="media-caption">Bottom Sheet</div>
+            </div>
+
+            <div class="media component-item" data-cat="overlays">
+              <img src="assets/img/case-ds-moex/Collapse.jpg" alt="Collapse" loading="lazy">
+              <div class="media-caption">Collapse</div>
+            </div>
+
+            <div class="media component-item" data-cat="overlays">
+              <img src="assets/img/case-ds-moex/Tour.jpg" alt="Tour" loading="lazy">
+              <div class="media-caption">Tour</div>
+            </div>
+
+            <!--Другие-->
+
+            <div class="media component-item" data-cat="other overview">
+              <img src="assets/img/case-ds-moex/ListItem.jpg" alt="ListItem" loading="lazy">
+              <div class="media-caption">ListItem</div>
+            </div>
+
+            <div class="media component-item" data-cat="other">
+              <img src="assets/img/case-ds-moex/Avatar.jpg" alt="Avatar" loading="lazy">
+              <div class="media-caption">Avatar</div>
+            </div>
+
+            <div class="media component-item" data-cat="other overview">
+              <img src="assets/img/case-ds-moex/Table.jpg" alt="Table" loading="lazy">
+              <div class="media-caption">Table</div>
+            </div> 
+
+            <div class="media component-item" data-cat="other">
+              <img src="assets/img/case-ds-moex/Upload.jpg" alt="Upload" loading="lazy">
+              <div class="media-caption">Upload</div>
+            </div>
+
+            <div class="media component-item" data-cat="other">
+              <img src="assets/img/case-ds-moex/Calendar.jpg" alt="Calendar" loading="lazy">
+              <div class="media-caption">Calendar</div>
+            </div>
+
+            <div class="media component-item" data-cat="other">
+              <img src="assets/img/case-ds-moex/Link.jpg" alt="Link" loading="lazy">
+              <div class="media-caption">Link</div>
+            </div>
+
+          </div>
+
+          <p class="small component-empty" id="component-empty" hidden>
+            В этой категории пока нет изображений.
+          </p>
+        </section>
+
+        <section id="documentation">
+  <h2>Документация</h2>
+  <p class="small">Структурированная документация: описание, анатомия, поведение, размеры, токены, клавиатура.</p>
+
+  <div class="grid-3">
+    <div class="media zoomable">
+      <img src="assets/img/case-ds-moex/docs/01-description.png" alt="Описание работы" loading="lazy">
+      <div class="media-caption">Описание работы</div>
+    </div>
+
+    <div class="media zoomable">
+      <img src="assets/img/case-ds-moex/docs/02-anatomy.png" alt="Анатомия" loading="lazy">
+      <div class="media-caption">Анатомия</div>
+    </div>
+
+    <div class="media zoomable">
+      <img src="assets/img/case-ds-moex/docs/03-behavior.png" alt="Правила поведения" loading="lazy">
+      <div class="media-caption">Правила поведения</div>
+    </div>
+
+    <div class="media zoomable">
+      <img src="assets/img/case-ds-moex/docs/04-spacing.png" alt="Отступы и размеры" loading="lazy">
+      <div class="media-caption">Отступы и размеры</div>
+    </div>
+
+    <div class="media zoomable">
+      <img src="assets/img/case-ds-moex/docs/05-tokens.png" alt="Токены" loading="lazy">
+      <div class="media-caption">Токены</div>
+    </div>
+
+    <div class="media zoomable">
+      <img src="assets/img/case-ds-moex/docs/06-keyboard.png" alt="Работа с клавиатурой" loading="lazy">
+      <div class="media-caption">Клавиатура</div>
+    </div>
+  </div>
+</section>
+
+        <section id="results">
+          <h2>Результаты</h2>
+          <ul>
+            <li>Ускорение разработки интерфейсов</li>
+            <li>Уменьшение количества UI-багов</li>
+            <li>Консистентность между продуктами</li>
+            <li>Единые UX-паттерны</li>
+            <li>Стандартизированные таблицы и сложные компоненты</li>
+            <li>Улучшение коммуникации команд</li>
+            <li>Современный визуальный язык</li>
+            <li>Стабильная база для масштабирования и новых продуктов</li>
+          </ul>
+        </section>
+
+        <section id="takeaways">
+          <h2>Выводы</h2>
+          <ul>
+            <li>Дизайн-система стала инструментом проектирования, коммуникации и согласования UX-решений между командами</li>
+            <li>Документация и правила использования компонентов обеспечили устойчивость системы и возможность её масштабирования</li>
+            <li>Компоненты и паттерны спроектированы универсальными и применимыми в разных продуктах и сценариях</li>
+            <li>UX-паттерны в аналитических интерфейсах выстроены с высокой точностью и предсказуемостью поведения</li>
+            <li>Совместная работа с продуктовыми командами и разработкой повысила качество и реализуемость UI-решений</li>
+          </ul>
+
+          <div class="case-nav">
+            <a class="btn" href="case-cbr-payments.html">← Следующий кейс: Платёжная система ЦБ</a>
+            <a class="btn" href="index.html#cases">К списку кейсов</a>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
