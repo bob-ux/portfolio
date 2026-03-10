@@ -529,6 +529,9 @@ html[data-theme="dark"] .btn:not(.primary):hover{
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-3);
 }
+.media + .grid-2{
+  margin-top: 24px;
+}
 
 /* Media blocks */
 .media{
