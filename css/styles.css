@@ -1316,3 +1316,121 @@ html[data-theme="dark"] .cookie-banner{
     width: 100%;
   }
 }
+/* =======================
+   About section — product style
+======================= */
+
+.about-layout{
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* Левая часть */
+.about-text h2{
+  margin-bottom: 16px;
+}
+
+.about-text p{
+  margin-bottom: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Правая часть */
+.about-visual{
+  height: 260px;
+  overflow: hidden;
+  position: relative;
+
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+}
+
+/* Дорожка с логотипами */
+.logos-track{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: scrollLogos 12s linear infinite;
+}
+
+/* Пауза при наведении */
+.about-visual:hover .logos-track{
+  animation-play-state: paused;
+}
+
+/* Элемент */
+.logo-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+/* Белая карточка логотипа */
+.logo-placeholder,
+.logo-item img{
+  width: 100%;
+  max-width: 200px;
+  height: 80px;
+  border-radius: 14px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+/* Текст заглушки */
+.logo-placeholder{
+  font-size: 12px;
+  color: #999;
+  letter-spacing: 0.04em;
+}
+
+/* Реальные логотипы */
+.logo-item img{
+  object-fit: contain;
+  padding: 12px;
+}
+
+/* Анимация */
+@keyframes scrollLogos{
+  0%{
+    transform: translateY(0);
+  }
+  100%{
+    transform: translateY(-50%);
+  }
+}
+
+/* Адаптив */
+@media (max-width: 900px){
+  .about-layout{
+    grid-template-columns: 1fr;
+  }
+
+  .about-visual{
+    height: 200px;
+  }
+
+  .logo-placeholder,
+  .logo-item img{
+    max-width: 160px;
+    height: 64px;
+  }
+}
