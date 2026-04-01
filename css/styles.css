@@ -1368,7 +1368,7 @@ html[data-theme="dark"] .cookie-banner{
 .logos-track{
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   animation: scrollLogos 12s linear infinite;
 }
 
@@ -1377,39 +1377,66 @@ html[data-theme="dark"] .cookie-banner{
   animation-play-state: paused;
 }
 
-/* Элемент */
+/* Карточка логотипа */
 .logo-item{
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px 0;
-}
 
-/* Белая карточка логотипа */
-.logo-placeholder,
-.logo-item img{
   width: 100%;
-  max-width: 200px;
+  max-width: 260px;
   height: 80px;
+
+  margin: 0 auto;
+  padding: 8px 12px;
+
   border-radius: 14px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+
+  transition:
+    background-color .22s ease,
+    box-shadow .22s ease,
+    transform .22s ease;
 }
 
-/* Текст заглушки */
-.logo-placeholder{
-  font-size: 12px;
-  color: #999;
-  letter-spacing: 0.04em;
-}
-
-/* Реальные логотипы */
+/* Сам логотип */
 .logo-item img{
+  width: auto;
+  max-width: 160px;
+  height: 80px;
+
   object-fit: contain;
-  padding: 12px;
+  display: block;
+
+  transition:
+    filter .22s ease,
+    opacity .22s ease,
+    transform .22s ease;
+}
+
+/* Light theme */
+html:not([data-theme="dark"]) .logo-item img{
+  filter: grayscale(100%) brightness(0);
+}
+
+/* Dark theme */
+html[data-theme="dark"] .logo-item{
+  background: #111827;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+}
+
+html[data-theme="dark"] .logo-item img{
+  filter: grayscale(100%) brightness(0) invert(1);
+}
+
+/* Hover */
+.logo-item:hover{
+  transform: scale(1.02);
+}
+
+.logo-item:hover img{
+  opacity: 1;
 }
 
 /* Анимация */
@@ -1429,18 +1456,19 @@ html[data-theme="dark"] .cookie-banner{
   }
 
   .about-visual{
-    height: 200px;
+    height: 220px;
   }
 
-  .logo-placeholder,
+  .logo-item{
+    max-width: 200px;
+    height: 80px;
+  }
+
   .logo-item img{
-    max-width: 160px;
-    height: 64px;
+    max-width: 150px;
+    height: 44px;
   }
 }
-
-
-
 
 /* =======================
    Proof impact block
