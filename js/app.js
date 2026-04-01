@@ -428,4 +428,97 @@
   });
 })();
 
+(function initSingleOpenDetails(){
+  // Ограничиваемся секцией документации (если она есть)
+  const scope = document.getElementById('documentation') || document;
+  const detailsList = Array.from(scope.querySelectorAll('details'));
+
+  if (!detailsList.length) return;
+
+  detailsList.forEach((d) => {
+    d.addEventListener('toggle', () => {
+      if (!d.open) return;
+
+      detailsList.forEach((other) => {
+        if (other !== d) other.open = false;
+      });
+    });
+  });
+})();
+(function initSingleOpenDetails(){
+  // Ограничиваемся секцией документации (если она есть)
+  const scope = document.getElementById('documentation') || document;
+  const detailsList = Array.from(scope.querySelectorAll('details'));
+
+  if (!detailsList.length) return;
+
+  detailsList.forEach((d) => {
+    d.addEventListener('toggle', () => {
+      if (!d.open) return; // реагируем только на открытие
+
+      detailsList.forEach((other) => {
+        if (other !== d) other.open = false;
+      });
+    });
+  });
+})();
+
+/* ======================
+   Count-up animation
+====================== */
+
+function initCountUp() {
+  const counters = document.querySelectorAll(".proof-impact-card__value[data-count]");
+  if (!counters.length) return;
+
+  const animateCounter = (el) => {
+    const target = parseInt(el.dataset.count, 10);
+    if (Number.isNaN(target)) return;
+
+    const duration = 1200;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(target * eased);
+
+      el.textContent = value;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        el.textContent = target;
+        el.classList.add("is-done");
+      }
+    }
+
+    requestAnimationFrame(update);
+  };
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+
+      const el = entry.target;
+
+      if (!el.dataset.animated) {
+        el.dataset.animated = "true";
+        animateCounter(el);
+      }
+
+      obs.unobserve(el);
+    });
+  }, {
+    threshold: 0.5
+  });
+
+  counters.forEach((counter) => observer.observe(counter));
+}
+
+initCountUp();
+
 })();

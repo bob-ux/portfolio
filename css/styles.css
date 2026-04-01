@@ -4,6 +4,8 @@
 :root{
   --bg:#f5f5f7;
   --card:#ffffff;
+  --card-strong: #0b0b0c;
+  --card-strong-text: #ffffff;
 
   --text:#111827;
   --muted:#4B5563;
@@ -40,6 +42,8 @@
 html[data-theme="dark"]{
   --bg:#0B0D12;
   --card:#12151C;
+  --card-strong: #f3f4f6;
+  --card-strong-text: #0f172a;
 
   --text:#F9FAFB;
   --muted:#9CA3AF;
@@ -1432,5 +1436,451 @@ html[data-theme="dark"] .cookie-banner{
   .logo-item img{
     max-width: 160px;
     height: 64px;
+  }
+}
+
+
+
+
+/* =======================
+   Proof impact block
+======================= */
+
+/* Theme tokens */
+:root {
+  --card-strong: #0b0b0c;
+  --card-strong-text: #ffffff;
+}
+
+html[data-theme="dark"] {
+  --card-strong: #f3f4f6;
+  --card-strong-text: #0f172a;
+}
+
+/* Section */
+.proof-impact {
+  padding-top: 0;
+}
+
+/* Grid */
+.proof-impact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+/* Card */
+.proof-impact-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
+  border-radius: var(--radius);
+
+  opacity: 0;
+  transform: translateY(12px);
+  animation: proofImpactIn 0.55s ease forwards;
+  transition: transform 0.22s ease;
+}
+
+.proof-impact-card:nth-child(1) { animation-delay: 0.04s; }
+.proof-impact-card:nth-child(2) { animation-delay: 0.10s; }
+.proof-impact-card:nth-child(3) { animation-delay: 0.16s; }
+.proof-impact-card:nth-child(4) { animation-delay: 0.22s; }
+
+.proof-impact-card:hover {
+  transform: translateY(-4px);
+}
+
+/* =======================
+   Bottom (base card)
+======================= */
+
+.proof-impact-card__bottom {
+  position: relative;
+  z-index: 1;
+
+  padding: 64px 22px 22px; /* 👈 запас под overlay */
+
+  background: var(--card-strong);
+  color: var(--card-strong-text);
+
+  border-radius: var(--radius);
+
+  box-shadow: var(--shadow-base);
+
+  transition:
+    background-color 0.22s ease,
+    color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+/* =======================
+   Top (overlay)
+======================= */
+
+.proof-impact-card__main {
+  position: relative;
+  z-index: 2;
+
+  background: var(--card);
+  padding: 26px 22px 20px;
+
+  border-radius: var(--radius);
+
+  box-shadow: var(--shadow-base);
+
+  margin-bottom: -56px; /* 👈 ключ к overlay */
+
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    background-color 0.22s ease;
+}
+
+.proof-impact-card:hover .proof-impact-card__main {
+  transform: translateY(-4px);
+}
+
+/* =======================
+   Text styles
+======================= */
+
+.proof-impact-card__title {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--muted2);
+}
+
+.proof-impact-card__value {
+  margin: 0 0 10px;
+  font-size: 76px;
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.proof-impact-card__label {
+  margin: 0 0 22px;
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.proof-impact-card__metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 84px;
+}
+
+.proof-impact-card__metric {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted2);
+}
+
+.proof-impact-card__desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 500;
+  color: inherit;
+}
+
+/* =======================
+   Animation
+======================= */
+
+@keyframes proofImpactIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =======================
+   Responsive
+======================= */
+
+@media (max-width: 1280px) {
+  .proof-impact-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .proof-impact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .proof-impact-card__main {
+    padding: 22px 18px 18px;
+    margin-bottom: -48px;
+  }
+
+  .proof-impact-card__bottom {
+    padding: 56px 18px 18px;
+  }
+
+  .proof-impact-card__value {
+    font-size: 62px;
+  }
+
+  .proof-impact-card__label {
+    font-size: 16px;
+  }
+
+  .proof-impact-card__metric,
+  .proof-impact-card__desc {
+    font-size: 15px;
+  }
+
+  .proof-impact-card__metrics {
+    min-height: auto;
+  }
+}
+
+
+/* =======================
+   Business problems block
+======================= */
+
+.business-problem-card__icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--muted2);
+  transition:
+    transform .22s ease,
+    color .22s ease,
+    opacity .22s ease;
+}
+
+.business-problem-card__icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.business-problem-card:hover .business-problem-card__icon {
+  transform: translateX(2px) scale(1.06);
+  color: var(--text);
+}
+
+.business-problems-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.business-problem-card {
+  min-height: 220px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow-base);
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  opacity: 0;
+  transform: translateY(12px);
+  animation: businessProblemIn .55s ease forwards;
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+.business-problem-card:nth-child(1) { animation-delay: .04s; }
+.business-problem-card:nth-child(2) { animation-delay: .10s; }
+.business-problem-card:nth-child(3) { animation-delay: .16s; }
+.business-problem-card:nth-child(4) { animation-delay: .22s; }
+
+.business-problem-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border2);
+}
+
+.business-problem-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.business-problem-card__icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(17,24,39,.04);
+  color: var(--text);
+}
+
+.business-problem-card__icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+html[data-theme="dark"] .business-problem-card__icon {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.14);
+}
+
+.business-problem-card__title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.business-problem-card__desc {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+@keyframes businessProblemIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 980px) {
+  .business-problems-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .business-problem-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .business-problem-card__title {
+    font-size: 22px;
+  }
+
+  .business-problem-card__desc {
+    font-size: 15px;
+  }
+}
+
+/* =======================
+   First 2–4 weeks
+======================= */
+
+.value-ramp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.value-ramp-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow-base);
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+.value-ramp-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border2);
+}
+
+.value-ramp-card__num {
+  margin-bottom: 14px;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--muted2);
+}
+
+.value-ramp-card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.value-ramp-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* =======================
+   Responsive
+======================= */
+
+@media (max-width: 1100px) {
+  .proof-home-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .value-ramp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 980px) {
+  .problem-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .proof-home-grid,
+  .value-ramp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .proof-card,
+  .problem-card,
+  .value-ramp-card {
+    min-height: auto;
+  }
+
+  .proof-card__metric {
+    font-size: 30px;
   }
 }
