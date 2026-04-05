@@ -9,10 +9,14 @@
   }
 
   // 1) Inject partials
-  await inject("#site-header", "partials/header.html");
-  await inject("#site-footer", "partials/footer.html");
+  await inject("#site-header", "/partials/header.html");
+  await inject("#site-footer", "/partials/footer.html");
 
-  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+  const pathname = location.pathname.toLowerCase();
+  const isHomePage = pathname === "/" || pathname === "/index.html";
+  const isCasePage = pathname.startsWith("/case-");
+  const isOtherProjectsPage =
+    pathname === "/other-projects/" || pathname === "/other-projects.html";
 
   // 2) Footer year
   const y = document.getElementById("y");
@@ -40,7 +44,7 @@
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
       const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
-      applyTheme(current === "dark" ? "light" : 'dark');
+      applyTheme(current === "dark" ? "light" : "dark");
     });
   }
 
@@ -99,78 +103,80 @@
     });
   }
 
-// TOC active item (case pages)
-(function initTocActive(){
-  const toc = document.querySelector(".toc");
-  if (!toc) return;
+  // TOC active item (case pages)
+  (function initTocActive() {
+    const toc = document.querySelector(".toc");
+    if (!toc) return;
 
-  const links = Array.from(toc.querySelectorAll('a[href^="#"]'));
-  if (!links.length) return;
+    const links = Array.from(toc.querySelectorAll('a[href^="#"]'));
+    if (!links.length) return;
 
-  const sections = links
-    .map(a => document.querySelector(a.getAttribute("href")))
-    .filter(Boolean);
+    const sections = links
+      .map((a) => document.querySelector(a.getAttribute("href")))
+      .filter(Boolean);
 
-  if (!sections.length) return;
+    if (!sections.length) return;
 
-  const header = document.querySelector(".site-header") || document.querySelector("header");
-  const getOffset = () => (header ? header.offsetHeight : 0) + 24;
+    const header = document.querySelector(".site-header") || document.querySelector("header");
+    const getOffset = () => (header ? header.offsetHeight : 0) + 24;
 
-  function onScroll(){
-    const y = window.scrollY + getOffset();
-    let activeIndex = 0;
+    function onScroll() {
+      const y = window.scrollY + getOffset();
+      let activeIndex = 0;
 
-    for (let i = 0; i < sections.length; i++){
-      if (y >= sections[i].offsetTop) {
-        activeIndex = i;
+      for (let i = 0; i < sections.length; i++) {
+        if (y >= sections[i].offsetTop) {
+          activeIndex = i;
+        }
       }
+
+      links.forEach((a, i) => {
+        a.classList.toggle("active", i === activeIndex);
+      });
     }
 
-    links.forEach((a, i) => {
-      a.classList.toggle("active", i === activeIndex);
-    });
-  }
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
-  onScroll();
-})();
-
-
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
+  })();
 
   // 5) Active nav state (index scroll + page based)
   const desktopNavLinks = document.querySelectorAll(".navlinks-desktop a");
   const mobileNavLinks = document.querySelectorAll(".mobile-links a");
 
   function clearActive() {
-    [...desktopNavLinks, ...mobileNavLinks].forEach(a => a.classList.remove("active"));
+    [...desktopNavLinks, ...mobileNavLinks].forEach((a) => a.classList.remove("active"));
   }
 
-  function setActiveByHrefIncludes(part) {
-    [...desktopNavLinks, ...mobileNavLinks].forEach(a => {
+  function setActiveByHrefIncludes(parts) {
+    const list = Array.isArray(parts) ? parts : [parts];
+
+    [...desktopNavLinks, ...mobileNavLinks].forEach((a) => {
       const href = a.getAttribute("href") || "";
-      if (href.includes(part)) a.classList.add("active");
+      if (list.some((part) => href.includes(part))) {
+        a.classList.add("active");
+      }
     });
   }
 
   // A) If it's a case page: highlight "Кейсы"
-  if (path.startsWith("case-")) {
+  if (isCasePage) {
     clearActive();
-    setActiveByHrefIncludes("index.html#cases");
+    setActiveByHrefIncludes(["/#cases", "index.html#cases"]);
   }
 
   // B) If it's other projects page: highlight "Другие проекты"
-  if (path === "other-projects.html") {
+  if (isOtherProjectsPage) {
     clearActive();
-    setActiveByHrefIncludes("other-projects.html");
+    setActiveByHrefIncludes(["/other-projects/", "other-projects.html"]);
   }
 
   // C) If it's index page: highlight based on scroll position (#cases / #contact)
-  if (path === "" || path === "index.html") {
+  if (isHomePage) {
     const anchors = [
-      { id: "cases", part: "index.html#cases" },
-      { id: "contact", part: "index.html#contact" },
-    ].map(x => ({ ...x, el: document.getElementById(x.id) }));
+      { id: "cases", parts: ["/#cases", "index.html#cases"] },
+      { id: "contact", parts: ["/#contact", "index.html#contact"] },
+    ].map((x) => ({ ...x, el: document.getElementById(x.id) }));
 
     function onScroll() {
       clearActive();
@@ -180,7 +186,7 @@
         const s = anchors[i];
         if (!s.el) continue;
         if (y >= s.el.offsetTop) {
-          setActiveByHrefIncludes(s.part);
+          setActiveByHrefIncludes(s.parts);
           break;
         }
       }
@@ -191,15 +197,15 @@
   }
 
   // 6) Highlight case cards on scroll (index page only)
-  if (path === "" || path === "index.html") {
+  if (isHomePage) {
     const caseCards = document.querySelectorAll(".case-card");
 
     if (caseCards.length && "IntersectionObserver" in window) {
       const observer = new IntersectionObserver(
         (entries) => {
-          entries.forEach(entry => {
+          entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              caseCards.forEach(c => c.classList.remove("is-active"));
+              caseCards.forEach((c) => c.classList.remove("is-active"));
               entry.target.classList.add("is-active");
             }
           });
@@ -207,318 +213,264 @@
         { threshold: 0.6 }
       );
 
-      caseCards.forEach(card => observer.observe(card));
+      caseCards.forEach((card) => observer.observe(card));
     }
   }
 
   (function initBackToTop() {
-  const existing = document.querySelector(".back-to-top");
-  if (existing) return;
+    const existing = document.querySelector(".back-to-top");
+    if (existing) return;
 
-  const btn = document.createElement("button");
-  btn.className = "back-to-top";
-  btn.type = "button";
-  btn.setAttribute("aria-label", "Наверх");
+    const btn = document.createElement("button");
+    btn.className = "back-to-top";
+    btn.type = "button";
+    btn.setAttribute("aria-label", "Наверх");
 
-  btn.innerHTML = `
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 5l-7 7m7-7l7 7M12 5v14"
-        stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  `;
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 5l-7 7m7-7l7 7M12 5v14"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
 
-  document.body.appendChild(btn);
+    document.body.appendChild(btn);
 
-  const BASE_BOTTOM = 16; // обычное положение
-  const FOOTER_OFFSET = 16; // зазор над футером
-  const SHOW_AFTER = 600;
+    const BASE_BOTTOM = 16;
+    const FOOTER_OFFSET = 16;
+    const SHOW_AFTER = 600;
 
-  const footer = document.querySelector("footer");
+    const footer = document.querySelector("footer");
 
-  function update() {
-    // показать / скрыть
-    btn.classList.toggle("is-visible", window.scrollY > SHOW_AFTER);
+    function update() {
+      btn.classList.toggle("is-visible", window.scrollY > SHOW_AFTER);
 
-    if (!footer) {
-      btn.style.bottom = `${BASE_BOTTOM}px`;
-      return;
-    }
+      if (!footer) {
+        btn.style.bottom = `${BASE_BOTTOM}px`;
+        return;
+      }
 
-    const footerTop = footer.getBoundingClientRect().top;
+      const footerTop = footer.getBoundingClientRect().top;
 
-    // если футер попал в viewport
-    if (footerTop < window.innerHeight) {
-      const lift =
-        window.innerHeight - footerTop + FOOTER_OFFSET;
-      btn.style.bottom = `${BASE_BOTTOM + lift}px`;
-    } else {
-      btn.style.bottom = `${BASE_BOTTOM}px`;
-    }
-  }
-
-  btn.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-
-  window.addEventListener("scroll", update, { passive: true });
-  window.addEventListener("resize", update);
-  update();
-})();
-
-(function initComponentFilters(){
-  const bar = document.querySelector('.filter-bar');
-  const buttons = Array.from(document.querySelectorAll('.filter-btn'));
-  const items = Array.from(document.querySelectorAll('.component-item'));
-  const empty = document.getElementById('component-empty');
-
-  if (!bar || !buttons.length) return;
-
-  function hasToken(el, token){
-    const raw = (el.getAttribute('data-cat') || '').trim();
-    if (!raw) return false;
-    return raw.split(/\s+/).includes(token);
-  }
-
-  // ---- Count map (by category) ----
-  function buildCounts(){
-    const counts = { all: 0 };
-
-    items.forEach(item => {
-      const raw = (item.getAttribute('data-cat') || '').trim();
-      if (!raw) return;
-
-      const tokens = raw.split(/\s+/);
-
-      // overview count for "all"
-      if (tokens.includes('overview')) counts.all += 1;
-
-      // per-category counts (exclude 'overview' itself)
-      tokens.forEach(t => {
-        if (t === 'overview') return;
-        counts[t] = (counts[t] || 0) + 1;
-      });
-    });
-
-    return counts;
-  }
-
-  function renderCounts(counts){
-    buttons.forEach(btn => {
-      const key = btn.getAttribute('data-filter');
-      const n = counts[key] ?? 0;
-
-      const spot = btn.querySelector('.filter-count');
-      if (!spot) return;
-
-      // без скобок: "Ввод 12"
-      spot.textContent = n ? ` ${n}` : '';
-    });
-  }
-
-  function setActive(btn){
-    buttons.forEach(b => {
-      const active = b === btn;
-      b.classList.toggle('is-active', active);
-      b.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
-  }
-
-  function applyFilter(filter){
-    let visibleCount = 0;
-
-    items.forEach(item => {
-      let show = false;
-
-      if (filter === 'all') {
-        // curated overview
-        show = hasToken(item, 'overview');
+      if (footerTop < window.innerHeight) {
+        const lift = window.innerHeight - footerTop + FOOTER_OFFSET;
+        btn.style.bottom = `${BASE_BOTTOM + lift}px`;
       } else {
-        // normal categories
-        show = hasToken(item, filter);
-      }
-
-      item.hidden = !show;
-      if (show) visibleCount++;
-    });
-
-    if (empty) empty.hidden = visibleCount !== 0;
-  }
-
-  // Init counts
-  const counts = buildCounts();
-  renderCounts(counts);
-
-  // Default filter = curated overview
-  applyFilter('all');
-
-  // Click handler
-  bar.addEventListener('click', (e) => {
-    const btn = e.target.closest('.filter-btn');
-    if (!btn) return;
-
-    const filter = btn.getAttribute('data-filter');
-    setActive(btn);
-    applyFilter(filter);
-  });
-})();
-
-(function initLightbox(){
-
-  const images = document.querySelectorAll('.zoomable img');
-  if (!images.length) return;
-
-  // Create lightbox once
-  const lightbox = document.createElement('div');
-  lightbox.className = 'lightbox';
-  lightbox.innerHTML = `
-    <button class="lightbox-close" aria-label="Закрыть">×</button>
-    <img src="" alt="">
-  `;
-  document.body.appendChild(lightbox);
-
-  const lightboxImg = lightbox.querySelector('img');
-  const closeBtn = lightbox.querySelector('.lightbox-close');
-
-  function open(src, alt){
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || '';
-    lightbox.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function close(){
-    lightbox.classList.remove('is-open');
-    document.body.style.overflow = '';
-  }
-
-  images.forEach(img => {
-    img.addEventListener('click', () => {
-      open(img.src, img.alt);
-    });
-  });
-
-  closeBtn.addEventListener('click', close);
-
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) close();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') close();
-  });
-
-})();
-
-(function initSingleOpenDetails(){
-  // Ограничиваемся секцией документации (если она есть)
-  const scope = document.getElementById('documentation') || document;
-  const detailsList = Array.from(scope.querySelectorAll('details'));
-
-  if (!detailsList.length) return;
-
-  detailsList.forEach((d) => {
-    d.addEventListener('toggle', () => {
-      if (!d.open) return; // реагируем только на открытие
-
-      detailsList.forEach((other) => {
-        if (other !== d) other.open = false;
-      });
-    });
-  });
-})();
-
-(function initSingleOpenDetails(){
-  // Ограничиваемся секцией документации (если она есть)
-  const scope = document.getElementById('documentation') || document;
-  const detailsList = Array.from(scope.querySelectorAll('details'));
-
-  if (!detailsList.length) return;
-
-  detailsList.forEach((d) => {
-    d.addEventListener('toggle', () => {
-      if (!d.open) return;
-
-      detailsList.forEach((other) => {
-        if (other !== d) other.open = false;
-      });
-    });
-  });
-})();
-(function initSingleOpenDetails(){
-  // Ограничиваемся секцией документации (если она есть)
-  const scope = document.getElementById('documentation') || document;
-  const detailsList = Array.from(scope.querySelectorAll('details'));
-
-  if (!detailsList.length) return;
-
-  detailsList.forEach((d) => {
-    d.addEventListener('toggle', () => {
-      if (!d.open) return; // реагируем только на открытие
-
-      detailsList.forEach((other) => {
-        if (other !== d) other.open = false;
-      });
-    });
-  });
-})();
-
-/* ======================
-   Count-up animation
-====================== */
-
-function initCountUp() {
-  const counters = document.querySelectorAll(".proof-impact-card__value[data-count]");
-  if (!counters.length) return;
-
-  const animateCounter = (el) => {
-    const target = parseInt(el.dataset.count, 10);
-    if (Number.isNaN(target)) return;
-
-    const duration = 1200;
-    const startTime = performance.now();
-
-    function update(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // easeOutCubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const value = Math.round(target * eased);
-
-      el.textContent = value;
-
-      if (progress < 1) {
-        requestAnimationFrame(update);
-      } else {
-        el.textContent = target;
-        el.classList.add("is-done");
+        btn.style.bottom = `${BASE_BOTTOM}px`;
       }
     }
 
-    requestAnimationFrame(update);
-  };
+    btn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  })();
 
-      const el = entry.target;
+  (function initComponentFilters() {
+    const bar = document.querySelector(".filter-bar");
+    const buttons = Array.from(document.querySelectorAll(".filter-btn"));
+    const items = Array.from(document.querySelectorAll(".component-item"));
+    const empty = document.getElementById("component-empty");
 
-      if (!el.dataset.animated) {
-        el.dataset.animated = "true";
-        animateCounter(el);
+    if (!bar || !buttons.length) return;
+
+    function hasToken(el, token) {
+      const raw = (el.getAttribute("data-cat") || "").trim();
+      if (!raw) return false;
+      return raw.split(/\s+/).includes(token);
+    }
+
+    function buildCounts() {
+      const counts = { all: 0 };
+
+      items.forEach((item) => {
+        const raw = (item.getAttribute("data-cat") || "").trim();
+        if (!raw) return;
+
+        const tokens = raw.split(/\s+/);
+
+        if (tokens.includes("overview")) counts.all += 1;
+
+        tokens.forEach((t) => {
+          if (t === "overview") return;
+          counts[t] = (counts[t] || 0) + 1;
+        });
+      });
+
+      return counts;
+    }
+
+    function renderCounts(counts) {
+      buttons.forEach((btn) => {
+        const key = btn.getAttribute("data-filter");
+        const n = counts[key] ?? 0;
+
+        const spot = btn.querySelector(".filter-count");
+        if (!spot) return;
+
+        spot.textContent = n ? ` ${n}` : "";
+      });
+    }
+
+    function setActive(btn) {
+      buttons.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-selected", active ? "true" : "false");
+      });
+    }
+
+    function applyFilter(filter) {
+      let visibleCount = 0;
+
+      items.forEach((item) => {
+        let show = false;
+
+        if (filter === "all") {
+          show = hasToken(item, "overview");
+        } else {
+          show = hasToken(item, filter);
+        }
+
+        item.hidden = !show;
+        if (show) visibleCount++;
+      });
+
+      if (empty) empty.hidden = visibleCount !== 0;
+    }
+
+    const counts = buildCounts();
+    renderCounts(counts);
+    applyFilter("all");
+
+    bar.addEventListener("click", (e) => {
+      const btn = e.target.closest(".filter-btn");
+      if (!btn) return;
+
+      const filter = btn.getAttribute("data-filter");
+      setActive(btn);
+      applyFilter(filter);
+    });
+  })();
+
+  (function initLightbox() {
+    const images = document.querySelectorAll(".zoomable img");
+    if (!images.length) return;
+
+    const lightbox = document.createElement("div");
+    lightbox.className = "lightbox";
+    lightbox.innerHTML = `
+      <button class="lightbox-close" aria-label="Закрыть">×</button>
+      <img src="" alt="">
+    `;
+    document.body.appendChild(lightbox);
+
+    const lightboxImg = lightbox.querySelector("img");
+    const closeBtn = lightbox.querySelector(".lightbox-close");
+
+    function open(src, alt) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || "";
+      lightbox.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function close() {
+      lightbox.classList.remove("is-open");
+      document.body.style.overflow = "";
+    }
+
+    images.forEach((img) => {
+      img.addEventListener("click", () => {
+        open(img.src, img.alt);
+      });
+    });
+
+    closeBtn.addEventListener("click", close);
+
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) close();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close();
+    });
+  })();
+
+  (function initSingleOpenDetails() {
+    const scope = document.getElementById("documentation") || document;
+    const detailsList = Array.from(scope.querySelectorAll("details"));
+
+    if (!detailsList.length) return;
+
+    detailsList.forEach((d) => {
+      d.addEventListener("toggle", () => {
+        if (!d.open) return;
+
+        detailsList.forEach((other) => {
+          if (other !== d) other.open = false;
+        });
+      });
+    });
+  })();
+
+  /* ======================
+     Count-up animation
+  ====================== */
+
+  function initCountUp() {
+    const counters = document.querySelectorAll(".proof-impact-card__value[data-count]");
+    if (!counters.length) return;
+
+    const animateCounter = (el) => {
+      const target = parseInt(el.dataset.count, 10);
+      if (Number.isNaN(target)) return;
+
+      const duration = 1200;
+      const startTime = performance.now();
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = Math.round(target * eased);
+
+        el.textContent = value;
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.textContent = target;
+          el.classList.add("is-done");
+        }
       }
 
-      obs.unobserve(el);
+      requestAnimationFrame(update);
+    };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        const el = entry.target;
+
+        if (!el.dataset.animated) {
+          el.dataset.animated = "true";
+          animateCounter(el);
+        }
+
+        obs.unobserve(el);
+      });
+    }, {
+      threshold: 0.5
     });
-  }, {
-    threshold: 0.5
-  });
 
-  counters.forEach((counter) => observer.observe(counter));
-}
+    counters.forEach((counter) => observer.observe(counter));
+  }
 
-initCountUp();
-
+  initCountUp();
 })();
