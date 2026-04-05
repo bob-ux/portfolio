@@ -2204,3 +2204,96 @@ html[data-theme="dark"] .back-to-top:hover{
     width:100%;
   }
 }
+
+/* =======================
+   404 Page
+======================= */
+
+.error-page {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 120px;
+}
+
+.error-content {
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.error-code {
+  font-size: clamp(56px, 10vw, 96px);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+  color: var(--text);
+  opacity: 0.12;
+}
+
+.error-content h1 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.15;
+}
+
+.error-content p {
+  margin: 0 auto 28px;
+  max-width: 480px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.error-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.error-actions .btn {
+  width: 100%;
+  max-width: 260px;
+}
+
+/* Если у тебя нет готовых модификаторов кнопок, добавь это */
+.btn-primary {
+  background: var(--text);
+  color: var(--bg);
+  border: 1px solid var(--text);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  transition: 0.2s ease;
+}
+
+/* Tablet+ */
+@media (min-width: 640px) {
+  .error-page {
+    padding: 64px 20px;
+  }
+
+  .error-actions {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .error-actions .btn {
+    width: auto;
+    max-width: none;
+  }
+}
