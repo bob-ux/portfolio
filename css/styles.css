@@ -96,7 +96,7 @@ a{
 }
 
 main{
-  padding:var(--space-6) 0 var(--space-8);
+  padding:var(--space-3) 0 var(--space-3);
 }
 
 .section{
@@ -1887,10 +1887,13 @@ html[data-theme="dark"] .cookie-banner{
    20. Footer
 ========================================================= */
 footer{
-  padding:48px 0;
-  border-top:1px solid rgba(255,255,255,.10);
-  background:#0B0D12;
-  color:#F9FAFB;
+  margin-top: 80px;
+  padding: 48px 0;
+  background: #0B0D12;
+  color: #F9FAFB;
+  border-top: none;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
 }
 
 footer .small{
@@ -2296,4 +2299,13 @@ html[data-theme="dark"] .back-to-top:hover{
     width: auto;
     max-width: none;
   }
+}
+
+/* =======================
+   24. Contact
+======================= */
+.contact-card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px; /* если нужно усилить */
 }
