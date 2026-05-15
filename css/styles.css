@@ -2,50 +2,33 @@
    01. Design tokens
 ========================================================= */
 :root{
-  /* Core surfaces */
-  --bg:#F4F6F8;
-  --card:#FFFFFF;
-  --card-soft:#FAFBFC;
-  --card-muted:#F0F2F5;
-  --card-strong:#0B0D12;
-  --card-strong-text:#FFFFFF;
+  --bg:#f5f5f7;
+  --card:#ffffff;
+  --card-strong:#0b0b0c;
+  --card-strong-text:#ffffff;
 
-  /* Text */
   --text:#111827;
   --muted:#4B5563;
   --muted2:#6B7280;
 
-  /* Accent */
   --accent:#111827;
-  --accent-soft:rgba(17,24,39,.06);
 
-  /* Borders */
-  --border:rgba(17,24,39,.09);
+  --border:rgba(17,24,39,.10);
   --border2:rgba(17,24,39,.14);
-  --border-strong:rgba(17,24,39,.18);
 
-  /* Radius */
   --radius:24px;
   --radius-sm:18px;
-  --radius-xs:12px;
 
-  /* Shadows */
   --shadow-base:
-    0 1px 0 rgba(16,24,40,.04),
-    0 12px 32px rgba(16,24,40,.06);
+    0 1px 0 rgba(16,24,40,.06),
+    0 10px 28px rgba(16,24,40,.06);
 
   --shadow-hover:
     0 1px 0 rgba(16,24,40,.06),
-    0 22px 56px rgba(16,24,40,.12);
+    0 18px 50px rgba(16,24,40,.12);
 
-  --shadow-soft:
-    0 1px 0 rgba(16,24,40,.03),
-    0 8px 24px rgba(16,24,40,.04);
-
-  /* Layout */
   --container:1200px;
 
-  /* Spacing */
   --space-1:8px;
   --space-2:16px;
   --space-3:24px;
@@ -59,83 +42,27 @@
 }
 
 html[data-theme="dark"]{
-  /* Core surfaces */
   --bg:#0B0D12;
   --card:#12151C;
-  --card-soft:#171B24;
-  --card-muted:#1D2230;
-  --card-strong:#F3F4F6;
-  --card-strong-text:#0F172A;
+  --card-strong:#f3f4f6;
+  --card-strong-text:#0f172a;
 
-  /* Text */
   --text:#F9FAFB;
-  --muted:#A1A8B3;
-  --muted2:#7B8494;
+  --muted:#9CA3AF;
+  --muted2:#6B7280;
 
-  /* Accent */
-  --accent:#FFFFFF;
-  --accent-soft:rgba(255,255,255,.08);
-
-  /* Borders */
   --border:rgba(255,255,255,.10);
-  --border2:rgba(255,255,255,.15);
-  --border-strong:rgba(255,255,255,.22);
+  --border2:rgba(255,255,255,.14);
 
-  /* Shadows */
+  --accent:#FFFFFF;
+
   --shadow-base:
     0 1px 0 rgba(0,0,0,.55),
-    0 12px 34px rgba(0,0,0,.48);
+    0 10px 30px rgba(0,0,0,.55);
 
   --shadow-hover:
     0 1px 0 rgba(0,0,0,.55),
-    0 24px 64px rgba(0,0,0,.70);
-
-  --shadow-soft:
-    0 1px 0 rgba(0,0,0,.45),
-    0 8px 24px rgba(0,0,0,.36);
-}
-
-/* =========================================================
-   01.1 Visual polish
-========================================================= */
-
-/* Мягкий продуктовый фон */
-body{
-  background:
-    radial-gradient(circle at 16% -8%, rgba(255,255,255,.95), transparent 34%),
-    radial-gradient(circle at 90% 8%, rgba(17,24,39,.035), transparent 28%),
-    var(--bg);
-}
-
-html[data-theme="dark"] body{
-  background:
-    radial-gradient(circle at 18% -8%, rgba(255,255,255,.07), transparent 32%),
-    radial-gradient(circle at 90% 8%, rgba(255,255,255,.035), transparent 28%),
-    var(--bg);
-}
-
-/* Поверхности выглядят чуть мягче и системнее */
-.card{
-  box-shadow:var(--shadow-soft);
-}
-
-.media{
-  border-color:var(--border);
-  background:var(--card);
-  box-shadow:var(--shadow-soft);
-}
-
-/* Pills ближе к продуктовым UI-тегам */
-.pill{
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-}
-
-html[data-theme="dark"] .pill{
-  border-color:var(--border);
-  background:var(--card-soft);
-  color:var(--text);
+    0 20px 60px rgba(0,0,0,.75);
 }
 
 /* =========================================================
@@ -804,9 +731,9 @@ html[data-theme="dark"] .case-thumb::after{
   object-fit:cover;
   object-position:top center;
   filter:
-    grayscale(55%)
-    brightness(.95)
-    contrast(1.04);
+    grayscale(100%)
+    brightness(.9)
+    contrast(1.02);
   transform:scale(1);
   transition:filter .35s ease, transform .35s ease;
 }
@@ -883,144 +810,6 @@ html[data-theme="dark"] .case-thumb::after{
   line-height:1.55;
   color:var(--muted);
 }
-
-
-/* =========================================================
-   10.1 Projects section architecture
-========================================================= */
-
-.projects-section{
-  display:flex;
-  flex-direction:column;
-}
-
-/* Отступ между группами проектов */
-.projects-group + .projects-group{
-  margin-top:var(--space-6);
-}
-
-.projects-group__header{
-  max-width:720px;
-  margin-bottom:var(--space-3);
-}
-
-.projects-group__header h3{
-  margin:0 0 8px;
-  font-size:22px;
-  line-height:1.3;
-  letter-spacing:-.02em;
-  color:var(--text);
-}
-
-.projects-group__header p{
-  margin:0;
-}
-
-/* Второй уровень: другие проекты */
-.projects-group--secondary{
-  padding-top:var(--space-2);
-}
-
-/* Другие проекты должны быть компактнее ключевых */
-.projects-group--secondary .case-grid{
-  grid-template-columns:repeat(3, 1fr);
-  gap:var(--space-3);
-}
-
-.projects-group--secondary .case-card{
-  border-radius:var(--radius-sm);
-  box-shadow:none;
-}
-
-.projects-group--secondary .case-card:hover{
-  transform:translateY(-2px);
-  box-shadow:var(--shadow-base);
-}
-
-.projects-group--secondary .case-thumb{
-  aspect-ratio:16 / 10;
-}
-
-.projects-group--secondary .case-card__content{
-  gap:8px;
-  padding:14px 16px 16px;
-}
-
-.projects-group--secondary .case-card__content::before{
-  left:16px;
-  right:16px;
-}
-
-.projects-group--secondary .case-card__eyebrow{
-  font-size:11px;
-}
-
-.projects-group--secondary .case-card__title{
-  font-size:18px;
-  line-height:1.28;
-}
-
-.projects-group--secondary .case-card__signal{
-  font-size:14px;
-  line-height:1.4;
-  font-weight:500;
-}
-
-/* Описание скрываем, чтобы второй уровень не конкурировал с основными кейсами */
-.projects-group--secondary .case-card__description{
-  display:none;
-}
-
-/* Responsive */
-@media (max-width:1100px){
-  .projects-group--secondary .case-grid{
-    grid-template-columns:repeat(2, 1fr);
-  }
-}
-
-@media (max-width:640px){
-  .projects-group + .projects-group{
-    margin-top:var(--space-5);
-  }
-
-  .projects-group__header{
-    margin-bottom:var(--space-2);
-  }
-
-  .projects-group__header h3{
-    font-size:20px;
-  }
-
-  .projects-group--secondary .case-grid{
-    grid-template-columns:1fr;
-  }
-
-  .projects-group--secondary .case-card__title{
-    font-size:20px;
-  }
-}
-
-/* Ключевые кейсы — визуально сильнее */
-.projects-group:not(.projects-group--secondary) .case-thumb img{
-  filter:
-    grayscale(30%)
-    brightness(.98)
-    contrast(1.04);
-}
-
-/* Дополнительные проекты — спокойнее */
-.projects-group--secondary .case-thumb img{
-  filter:
-    grayscale(65%)
-    brightness(.94)
-    contrast(1.03);
-}
-
-.projects-group--secondary{
-  padding-top:var(--space-4);
-  border-top:1px solid var(--border);
-}
-
 
 /* =========================================================
    11. Case pages
