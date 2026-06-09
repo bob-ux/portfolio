@@ -1180,9 +1180,6 @@ html[data-theme="dark"] .case-thumb::after{
   border:1px solid var(--preview-border);
   border-radius:28px;
   background:var(--preview-bg);
-  box-shadow:
-    0 28px 80px var(--preview-shadow),
-    0 1px 0 var(--preview-highlight);
   transform:rotate(-1deg);
 }
 
