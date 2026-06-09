@@ -473,4 +473,169 @@
   }
 
   initCountUp();
+
+(function initHeroSphere() {
+  const canvas = document.getElementById("heroSphereCanvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const holder = canvas.parentElement;
+  const root = document.documentElement;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let width = 0;
+  let height = 0;
+  let raf = null;
+  let points = [];
+  let resizeFrame = null;
+
+  const pointer = {
+    x: 0,
+    y: 0,
+    active: false
+  };
+
+  function getCssVar(name, fallback = "") {
+    const value = getComputedStyle(root).getPropertyValue(name).trim();
+    return value || fallback;
+  }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    width = rect.width;
+    height = rect.height;
+
+    canvas.width = Math.max(1, Math.round(width * dpr));
+    canvas.height = Math.max(1, Math.round(height * dpr));
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    createPoints();
+  }
+
+  function createPoints() {
+    points = [];
+
+    const count = width < 320 ? 140 : 230;
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+
+    for (let i = 0; i < count; i += 1) {
+      const t = i / count;
+      const y = 1 - t * 2;
+      const radius = Math.sqrt(Math.max(0, 1 - y * y));
+      const theta = goldenAngle * i;
+
+      points.push({
+        x: Math.cos(theta) * radius,
+        y,
+        z: Math.sin(theta) * radius,
+        size: Math.random() * 2 + 1,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw(time) {
+    const accent = getCssVar("--accent", "#2563EB");
+
+    ctx.clearRect(0, 0, width, height);
+
+    const cx = width / 2;
+    const cy = height / 2;
+    const sphereRadius = Math.min(width, height) * 0.42;
+
+    const rotY = time * 0.00022;
+    const rotX = -0.35;
+
+    points.forEach((p) => {
+      const x = p.x;
+      const y = p.y;
+      const z = p.z;
+
+      const x1 = x * Math.cos(rotY) - z * Math.sin(rotY);
+      const z1 = x * Math.sin(rotY) + z * Math.cos(rotY);
+
+      const y2 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+      const z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+
+      const perspective = 1 / (1.9 - z2);
+
+      let px = cx + x1 * sphereRadius * perspective;
+      let py = cy + y2 * sphereRadius * perspective;
+
+      if (pointer.active) {
+        const dx = px - pointer.x;
+        const dy = py - pointer.y;
+        const distance = Math.max(1, Math.hypot(dx, dy));
+
+        if (distance < 120) {
+          const force = (1 - distance / 120) * 16;
+          px += (dx / distance) * force;
+          py += (dy / distance) * force;
+        }
+      }
+
+      const pulse = 0.85 + Math.sin(time * 0.0014 + p.phase) * 0.15;
+      const radius = p.size * perspective * pulse;
+      const alpha = 0.18 + ((z2 + 1) / 2) * 0.55;
+
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fillStyle = accent;
+      ctx.globalAlpha = alpha;
+      ctx.fill();
+    });
+
+    ctx.globalAlpha = 1;
+
+    if (!reduceMotion.matches) {
+      raf = requestAnimationFrame(draw);
+    }
+  }
+
+  function start() {
+    cancelAnimationFrame(raf);
+    resize();
+    draw(0);
+  }
+
+  function scheduleStart() {
+    if (resizeFrame) cancelAnimationFrame(resizeFrame);
+
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = null;
+      start();
+    });
+  }
+
+  holder.addEventListener("pointermove", (event) => {
+    const rect = canvas.getBoundingClientRect();
+
+    pointer.x = event.clientX - rect.left;
+    pointer.y = event.clientY - rect.top;
+    pointer.active = true;
+  });
+
+  holder.addEventListener("pointerleave", () => {
+    pointer.active = false;
+  });
+
+  if ("ResizeObserver" in window) {
+    const resizeObserver = new ResizeObserver(scheduleStart);
+    resizeObserver.observe(holder);
+  }
+
+  window.addEventListener("resize", scheduleStart);
+
+  if (reduceMotion.addEventListener) {
+    reduceMotion.addEventListener("change", scheduleStart);
+  }
+
+  start();
+})();
+
 })();

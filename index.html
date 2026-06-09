@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Портфолио</title>
+  <title>Портфолио Артема Тимофеева</title>
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -11,8 +11,8 @@
   <link rel="manifest" href="/site.webmanifest">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Портфолио — UX/UI дизайнер">
-  <meta property="og:description" content="Проектирование аналитических систем, дашбордов и дизайн-систем для сложных корпоративных продуктов.">
+  <meta property="og:title" content="Артем — UX/UI дизайнер">
+  <meta property="og:description" content="UX/UI Designer с 6 годами релевантного опыта в B2B, финтехе, корпоративных и аналитических веб-системах.">
   <meta property="og:image" content="https://forpikbob.ru/assets/img/preview-v2.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,8 +22,8 @@
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Портфолио — UX/UI дизайнер">
-  <meta name="twitter:description" content="Проектирование аналитических систем, дашбордов и дизайн-систем для сложных корпоративных продуктов.">
+  <meta name="twitter:title" content="Артем — UX/UI дизайнер">
+  <meta name="twitter:description" content="UX/UI Designer с 6 годами релевантного опыта в B2B, финтехе, корпоративных и аналитических веб-системах.">
   <meta name="twitter:image" content="https://forpikbob.ru/assets/img/preview-v2.jpg">
 
   <!-- Google Analytics -->
@@ -37,133 +37,204 @@
 <main>
   <div class="container">
 
-    <section class="hero">
-      <div class="hero-grid">
-        <div>
-          <h1>UX/UI Designer <br> для сложных B2B и аналитических систем</h1>
-          <p class="subtitle">
-            Проектирую интерфейсы для аналитических платформ, личных кабинетов и дашбордов.
-            Помогаю командам превращать сложные требования в понятные, устойчивые и масштабируемые решения.
-          </p>
+    <section class="hero-intro">
+        <div class="hero-intro__shell">
 
-          <div class="hero-meta">
-            <span class="pill">Fintech</span>
-            <span class="pill">Dashboards</span>
-            <span class="pill">Design systems</span>
+          <div class="hero-intro__grid">
+
+            <div class="hero-intro__copy">
+
+              <div class="hero-heading">
+                <p class="hero-heading__scope">
+                Артем
+              </p>
+              <h1 class="hero-heading__title">
+              <span class="hero-heading__accent">UX/UI дизайнер</span> 
+              </h1>
+              <p class="hero-heading__scope">
+                для сложных B2B и аналитических систем
+              </p>
+            </div>
+
+            <p class="hero-intro__subtitle">
+              Проектирую интерфейсы для финтеха, корпоративных и аналитических продуктов.
+              Упрощаю сложную продуктовую логику, снижаю риск ошибок и помогаю командам
+              быстрее выпускать консистентные решения.
+            </p>
+
+              <div class="hero-intro__stats">
+                <div class="hero-intro__stat">
+                  <div class="hero-intro__stat-circle">6+</div>
+                  <div class="hero-intro__stat-text">
+                    лет в B2B, финтехе и сложных интерфейсах
+                  </div>
+                </div>
+
+                <div class="hero-intro__stat">
+                  <div class="hero-intro__stat-circle">UX</div>
+                  <div class="hero-intro__stat-text">
+                    роли, статусы, формы и ошибки
+                  </div>
+                </div>
+
+                <div class="hero-intro__stat">
+                  <div class="hero-intro__stat-circle">DS</div>
+                  <div class="hero-intro__stat-text">
+                    токены, компоненты и документация
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <a class="btn primary" href="/#cases">
+                  Смотреть кейсы
+                </a>
+              </div>
+
+            </div>
+
+            <div class="hero-intro__visual" aria-hidden="true">
+              <div class="hero-intro__glow"></div>
+              <canvas id="heroSphereCanvas"></canvas>
+            </div>
+
           </div>
 
-          <div class="actions">
-            <a class="btn primary" href="/#cases">Смотреть ключевые кейсы</a>
-            <a class="btn" href="/#contact">Связаться</a>
-          </div>
         </div>
-
-        <div class="card card-pad">
-          <p class="lead"><b>Сильные стороны</b></p>
-          <div class="hero-strong">
-            <div>Сложные интерфейсы и сценарии</div>
-            <div>Архитектура интерфейсов</div>
-            <div>Design systems</div>
-            <div>Связка бизнеса, продукта и разработки</div>
-          </div>
-          <!--<p class="small">Этот блок можно заменить на логотипы компаний или краткий executive summary.</p>-->
-        </div>
-      </div>
-    </section>
+      </section>
 
     <!-- =======================
          Cases
-    ======================= -->
+======================= -->
 
-    <section id="cases" class="section">
+    <section id="cases" class="section featured-cases">
       <div class="section-title case-section-title">
-        <h2>Ключевые кейсы</h2>
-        <p>4 проекта, которые лучше всего отражают мой уровень, фокус и подход к сложным продуктам.</p>
+        <h1>Ключевые кейсы</h1>
       </div>
 
-      <div class="grid-2 case-grid">
+      <div class="featured-case-list">
 
-        <a class="card case-card" href="/case-ds-moex/">
-          <div class="case-thumb">
-            <img src="/assets/img/moex.webp" alt="Дизайн-система Московской Биржи" loading="lazy"/>
-          </div>
+        <!-- DS -->
+        <a class="featured-case featured-case--ds" href="/case-ds-moex/">
+          <div class="featured-case__copy">
+            <p class="featured-case__eyebrow">UX/UI Designer | Май 2024 — Ноябрь 2025</p>
 
-          <div class="case-card__content">
-            <p class="case-card__eyebrow">Design System / Fintech</p>
-
-            <h3 class="case-card__title">
-              Дизайн-система
+            <h3 class="featured-case__title">
+              Дизайн-система для продуктовых команд
             </h3>
 
-            <div class="case-card__meta">
-              <p class="case-card__signal">44 компонента, 9 групп design tokens</p>
-              <p class="case-card__description">
-                Единые UX-паттерны и снижение UI-ошибок в продуктах.
-              </p>
+            <div class="featured-case__tags">
+              <span>Design System</span>
+              <span>Tokens</span>
+              <span>Components</span>
+              <span>Design Review</span>
             </div>
+
+            <p class="featured-case__desc">
+              44 компонента, 9 групп токенов и единые UX-паттерны для снижения разрозненности интерфейсов
+              и ускорения работы продуктовых команд.
+            </p>
+
+            <div class="featured-case__link">
+              Смотреть кейс
+            </div>
+          </div>
+
+          <div class="featured-case__screen">
+            <img src="/assets/img/moex.webp" alt="Дизайн-система Московской Биржи" loading="lazy">
           </div>
         </a>
 
-        <a class="card case-card" href="/case-cbr-payments/">
-          <div class="case-thumb">
-            <img src="/assets/img/cb.webp" alt="Платёжная система Банка России" loading="lazy"/>
-          </div>
+        <!-- CBR -->
+        <a class="featured-case featured-case--payments" href="/case-cbr-payments/">
+          <div class="featured-case__copy">
+            <p class="featured-case__eyebrow">UX/UI Designer | Январь 2020 — Октябрь 2021</p>
 
-          <div class="case-card__content">
-            <p class="case-card__eyebrow">Payment System / Fintech</p>
-
-            <h3 class="case-card__title">
-              Платежная система Банка России
+            <h3 class="featured-case__title">
+              Платёжная система Банка России
             </h3>
 
-            <div class="case-card__meta">
-              <p class="case-card__signal">Высокая точность данных</p>
-              <p class="case-card__description">
-                Минимизация ошибок в критичных сценариях.
-              </p>
+            <div class="featured-case__tags">
+              <span>Forms</span>
+              <span>Roles</span>
+              <span>Validation</span>
+              <span>Flows</span>
             </div>
+
+            <p class="featured-case__desc">
+              Формы, статусы, права доступа и операционные сценарии для внутреннего продукта,
+              где ошибка при работе с данными может быть критичной.
+            </p>
+
+            <div class="featured-case__link">
+              Смотреть кейс
+            </div>
+          </div>
+
+          <div class="featured-case__screen">
+            <img src="/assets/img/case-cbr-payments/Form.webp" alt="Форма платёжной системы Банка России" loading="lazy">
           </div>
         </a>
 
-        <a class="card case-card" href="/case-analytics-system/">
-          <div class="case-thumb">
-            <img src="/assets/img/analytics-system.webp" alt="Аналитическая система" loading="lazy"/>
-          </div>
+        <!-- Analytics -->
+        <a class="featured-case featured-case--analytics" href="/case-analytics-system/">
+          <div class="featured-case__copy">
+            <p class="featured-case__eyebrow">UX/UI Designer | Июнь 2023 — Май 2024</p>
 
-          <div class="case-card__content">
-            <p class="case-card__eyebrow">Analytics Platform / Enterprise</p>
-
-            <h3 class="case-card__title">
+            <h3 class="featured-case__title">
               Система мониторинга национальных показателей
             </h3>
 
-            <div class="case-card__meta">
-              <p class="case-card__signal">6 разделов, 4 роли</p>
-              <p class="case-card__description">
-                Структурирование сложных данных и аналитических сценариев.
-              </p>
+            <div class="featured-case__tags">
+              <span>Analytics</span>
+              <span>Roles</span>
+              <span>UX Architecture</span>
+              <span>Data-heavy UX</span>
             </div>
+
+            <p class="featured-case__desc">
+              6 разделов и 4 пользовательские роли в аналитической платформе,
+              где нужно было структурировать сложную логику, данные и сценарии.
+            </p>
+
+            <div class="featured-case__link">
+              Смотреть кейс
+            </div>
+          </div>
+
+          <div class="featured-case__screen">
+            <img src="/assets/img/case-analytics-system/Dashboard.webp" alt="Аналитическая система мониторинга показателей" loading="lazy">
           </div>
         </a>
 
-        <a class="card case-card" href="/case-dashboards/">
-          <div class="case-thumb">
-            <img src="/assets/img/dashboards.webp" alt="Аналитические дашборды" loading="lazy"/>
-          </div>
+        <!-- Dashboards -->
+        <a class="featured-case featured-case--dashboards featured-case--dark" href="/case-dashboards/">
+          <div class="featured-case__copy">
+            <p class="featured-case__eyebrow">UX/UI Designer | Октябрь 2021 — Май 2023</p>
 
-          <div class="case-card__content">
-            <p class="case-card__eyebrow">Dashboards / Data Visualization</p>
-
-            <h3 class="case-card__title">
+            <h3 class="featured-case__title">
               Управленческие дашборды для руководителей
             </h3>
 
-            <div class="case-card__meta">
-              <p class="case-card__signal">35 дашбордов</p>
-              <p class="case-card__description">
-                Быстрое принятие решений на основе данных.
-              </p>
+            <div class="featured-case__tags">
+              <span>Data Viz</span>
+              <span>KPI</span>
+              <span>Executive UI</span>
+              <span>Decision-making</span>
             </div>
+
+            <p class="featured-case__desc">
+              35 дашбордов для руководителей и заместителей, где важно быстро считывать показатели,
+              сравнивать данные и принимать управленческие решения.
+            </p>
+
+            <div class="featured-case__link">
+              Смотреть кейс
+            </div>
+          </div>
+
+          <div class="featured-case__screen">
+            <img src="/assets/img/case-dashboards/Main.webp" alt="Управленческий дашборд" loading="lazy">
           </div>
         </a>
 
