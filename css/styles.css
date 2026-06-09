@@ -1314,6 +1314,156 @@ html[data-theme="dark"] .featured-case{
 }
 
 /* =========================================================
+   10.3 Other project cards
+========================================================= */
+
+.other-projects-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:var(--space-3);
+}
+
+.other-project-card{
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:32px;
+  background:var(--card-muted);
+  color:var(--text);
+  transition:
+    transform .22s ease,
+    border-color .22s ease,
+    background-color .22s ease;
+}
+
+.other-project-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--border2);
+}
+
+.other-project-card__thumb{
+  overflow:hidden;
+  margin:24px 24px 0;
+  aspect-ratio:16 / 10;
+  border-radius:24px;
+  background:var(--card);
+}
+
+.other-project-card__thumb img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  transition:transform .32s ease;
+}
+
+.other-project-card:hover .other-project-card__thumb img{
+  transform:scale(1.025);
+}
+
+.other-project-card__content{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  padding:28px 24px 30px;
+}
+
+.other-project-card__eyebrow{
+  margin:0 0 22px;
+  color:var(--muted2);
+  font-size:15px;
+  line-height:1.45;
+}
+
+.other-project-card__title{
+  margin:0 0 18px;
+  max-width:13ch;
+  font-family:ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  font-size:clamp(28px, 2.8vw, 36px);
+  line-height:1.08;
+  letter-spacing:-.045em;
+  font-weight:500;
+  color:var(--text);
+  text-wrap:balance;
+}
+
+.other-project-card__signal{
+  margin:0 0 12px;
+  font-size:17px;
+  line-height:1.45;
+  font-weight:600;
+  color:var(--text);
+}
+
+.other-project-card__description{
+  margin:0;
+  max-width:42ch;
+  font-size:16px;
+  line-height:1.6;
+  color:var(--muted);
+}
+
+/* Dark theme */
+html[data-theme="dark"] .other-project-card{
+  background:var(--card-soft);
+  border-color:var(--border);
+}
+
+html[data-theme="dark"] .other-project-card:hover{
+  border-color:var(--border2);
+}
+
+html[data-theme="dark"] .other-project-card__thumb{
+  background:var(--card);
+}
+
+/* Responsive */
+@media (max-width:1100px){
+  .other-projects-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width:720px){
+  .other-projects-grid{
+    grid-template-columns:1fr;
+  }
+
+  .other-project-card{
+    border-radius:28px;
+  }
+
+  .other-project-card__thumb{
+    margin:18px 18px 0;
+    border-radius:22px;
+  }
+
+  .other-project-card__content{
+    padding:24px 20px 26px;
+  }
+
+  .other-project-card__eyebrow{
+    margin-bottom:18px;
+  }
+
+  .other-project-card__title{
+    max-width:none;
+    font-size:32px;
+  }
+
+  .other-project-card__signal{
+    font-size:16px;
+  }
+
+  .other-project-card__description{
+    font-size:15px;
+  }
+}
+
+/* =========================================================
    11. Case pages
 ========================================================= */
 .case-hero{
