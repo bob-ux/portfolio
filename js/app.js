@@ -4,6 +4,7 @@
   async function inject(selector, url) {
     const el = document.querySelector(selector);
     if (!el) return;
+
     const res = await fetch(url, { cache: "no-cache" });
     el.innerHTML = await res.text();
   }
@@ -22,21 +23,30 @@
   const y = document.getElementById("y");
   if (y) y.textContent = new Date().getFullYear();
 
-  // 3) Theme (switch)
+  // 3) Theme switch
   const themeBtn = document.querySelector(".theme-switch");
 
   function getPreferredTheme() {
     const saved = localStorage.getItem("theme");
-    if (saved === "light" || saved === "dark") return saved;
+
+    if (saved === "light" || saved === "dark") {
+      return saved;
+    }
+
     const prefersDark =
-      window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+
     return prefersDark ? "dark" : "light";
   }
 
   function applyTheme(theme) {
     root.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-    if (themeBtn) themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
+
+    if (themeBtn) {
+      themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
+    }
   }
 
   applyTheme(getPreferredTheme());
@@ -57,22 +67,29 @@
     function setHiddenAfterClose() {
       const onEnd = (e) => {
         if (e.propertyName !== "opacity") return;
+
         mobileMenu.hidden = true;
         mobileMenu.removeEventListener("transitionend", onEnd);
       };
+
       mobileMenu.addEventListener("transitionend", onEnd);
     }
 
     function openMenu() {
       menuBtn.setAttribute("aria-expanded", "true");
       menuBtn.classList.add("is-open");
+
       mobileMenu.hidden = false;
-      requestAnimationFrame(() => mobileMenu.classList.add(OPEN_CLASS));
+
+      requestAnimationFrame(() => {
+        mobileMenu.classList.add(OPEN_CLASS);
+      });
     }
 
     function closeMenu() {
       menuBtn.setAttribute("aria-expanded", "false");
       menuBtn.classList.remove("is-open");
+
       mobileMenu.classList.remove(OPEN_CLASS);
       setHiddenAfterClose();
     }
@@ -103,7 +120,7 @@
     });
   }
 
-  // TOC active item (case pages)
+  // 5) TOC active item on case pages
   (function initTocActive() {
     const toc = document.querySelector(".toc");
     if (!toc) return;
@@ -124,7 +141,7 @@
       const y = window.scrollY + getOffset();
       let activeIndex = 0;
 
-      for (let i = 0; i < sections.length; i++) {
+      for (let i = 0; i < sections.length; i += 1) {
         if (y >= sections[i].offsetTop) {
           activeIndex = i;
         }
@@ -137,15 +154,18 @@
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+
     onScroll();
   })();
 
-  // 5) Active nav state (index scroll + page based)
+  // 6) Active nav state
   const desktopNavLinks = document.querySelectorAll(".navlinks-desktop a");
   const mobileNavLinks = document.querySelectorAll(".mobile-links a");
 
   function clearActive() {
-    [...desktopNavLinks, ...mobileNavLinks].forEach((a) => a.classList.remove("active"));
+    [...desktopNavLinks, ...mobileNavLinks].forEach((a) => {
+      a.classList.remove("active");
+    });
   }
 
   function setActiveByHrefIncludes(parts) {
@@ -153,6 +173,7 @@
 
     [...desktopNavLinks, ...mobileNavLinks].forEach((a) => {
       const href = a.getAttribute("href") || "";
+
       if (list.some((part) => href.includes(part))) {
         a.classList.add("active");
       }
@@ -171,20 +192,26 @@
     setActiveByHrefIncludes(["/other-projects/", "other-projects.html"]);
   }
 
-  // C) If it's index page: highlight based on scroll position (#cases / #contact)
+  // C) If it's index page: highlight based on scroll position
   if (isHomePage) {
     const anchors = [
       { id: "cases", parts: ["/#cases", "index.html#cases"] },
       { id: "contact", parts: ["/#contact", "index.html#contact"] },
-    ].map((x) => ({ ...x, el: document.getElementById(x.id) }));
+    ].map((x) => ({
+      ...x,
+      el: document.getElementById(x.id),
+    }));
 
     function onScroll() {
       clearActive();
+
       const y = window.scrollY + 120;
 
-      for (let i = anchors.length - 1; i >= 0; i--) {
+      for (let i = anchors.length - 1; i >= 0; i -= 1) {
         const s = anchors[i];
+
         if (!s.el) continue;
+
         if (y >= s.el.offsetTop) {
           setActiveByHrefIncludes(s.parts);
           break;
@@ -196,7 +223,7 @@
     onScroll();
   }
 
-  // 6) Highlight case cards on scroll (index page only)
+  // 7) Highlight case cards on scroll
   if (isHomePage) {
     const caseCards = document.querySelectorAll(".case-card");
 
@@ -204,19 +231,27 @@
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              caseCards.forEach((c) => c.classList.remove("is-active"));
-              entry.target.classList.add("is-active");
-            }
+            if (!entry.isIntersecting) return;
+
+            caseCards.forEach((c) => {
+              c.classList.remove("is-active");
+            });
+
+            entry.target.classList.add("is-active");
           });
         },
-        { threshold: 0.6 }
+        {
+          threshold: 0.6,
+        }
       );
 
-      caseCards.forEach((card) => observer.observe(card));
+      caseCards.forEach((card) => {
+        observer.observe(card);
+      });
     }
   }
 
+  // 8) Back to top
   (function initBackToTop() {
     const existing = document.querySelector(".back-to-top");
     if (existing) return;
@@ -261,14 +296,19 @@
     }
 
     btn.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     });
 
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
+
     update();
   })();
 
+  // 9) Component filters
   (function initComponentFilters() {
     const bar = document.querySelector(".filter-bar");
     const buttons = Array.from(document.querySelectorAll(".filter-btn"));
@@ -280,6 +320,7 @@
     function hasToken(el, token) {
       const raw = (el.getAttribute("data-cat") || "").trim();
       if (!raw) return false;
+
       return raw.split(/\s+/).includes(token);
     }
 
@@ -292,10 +333,13 @@
 
         const tokens = raw.split(/\s+/);
 
-        if (tokens.includes("overview")) counts.all += 1;
+        if (tokens.includes("overview")) {
+          counts.all += 1;
+        }
 
         tokens.forEach((t) => {
           if (t === "overview") return;
+
           counts[t] = (counts[t] || 0) + 1;
         });
       });
@@ -318,6 +362,7 @@
     function setActive(btn) {
       buttons.forEach((b) => {
         const active = b === btn;
+
         b.classList.toggle("is-active", active);
         b.setAttribute("aria-selected", active ? "true" : "false");
       });
@@ -336,13 +381,19 @@
         }
 
         item.hidden = !show;
-        if (show) visibleCount++;
+
+        if (show) {
+          visibleCount += 1;
+        }
       });
 
-      if (empty) empty.hidden = visibleCount !== 0;
+      if (empty) {
+        empty.hidden = visibleCount !== 0;
+      }
     }
 
     const counts = buildCounts();
+
     renderCounts(counts);
     applyFilter("all");
 
@@ -351,21 +402,25 @@
       if (!btn) return;
 
       const filter = btn.getAttribute("data-filter");
+
       setActive(btn);
       applyFilter(filter);
     });
   })();
 
+  // 10) Lightbox
   (function initLightbox() {
     const images = document.querySelectorAll(".zoomable img");
     if (!images.length) return;
 
     const lightbox = document.createElement("div");
     lightbox.className = "lightbox";
+
     lightbox.innerHTML = `
       <button class="lightbox-close" aria-label="Закрыть">×</button>
       <img src="" alt="">
     `;
+
     document.body.appendChild(lightbox);
 
     const lightboxImg = lightbox.querySelector("img");
@@ -374,6 +429,7 @@
     function open(src, alt) {
       lightboxImg.src = src;
       lightboxImg.alt = alt || "";
+
       lightbox.classList.add("is-open");
       document.body.style.overflow = "hidden";
     }
@@ -400,6 +456,7 @@
     });
   })();
 
+  // 11) Single open details
   (function initSingleOpenDetails() {
     const scope = document.getElementById("documentation") || document;
     const detailsList = Array.from(scope.querySelectorAll("details"));
@@ -411,17 +468,17 @@
         if (!d.open) return;
 
         detailsList.forEach((other) => {
-          if (other !== d) other.open = false;
+          if (other !== d) {
+            other.open = false;
+          }
         });
       });
     });
   })();
 
-  /* ======================
-     Count-up animation
-  ====================== */
-
-  function initCountUp() {
+  // 12) Old proof count-up animation
+  // Можно удалить, когда старый блок .proof-impact-card точно убран со всех страниц.
+  (function initCountUp() {
     const counters = document.querySelectorAll(".proof-impact-card__value[data-count]");
     if (!counters.length) return;
 
@@ -435,7 +492,6 @@
       function update(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-
         const eased = 1 - Math.pow(1 - progress, 3);
         const value = Math.round(target * eased);
 
@@ -452,190 +508,318 @@
       requestAnimationFrame(update);
     };
 
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-
-        const el = entry.target;
-
-        if (!el.dataset.animated) {
-          el.dataset.animated = "true";
-          animateCounter(el);
-        }
-
-        obs.unobserve(el);
+    if (!("IntersectionObserver" in window)) {
+      counters.forEach((counter) => {
+        counter.textContent = counter.dataset.count;
       });
-    }, {
-      threshold: 0.5
-    });
 
-    counters.forEach((counter) => observer.observe(counter));
-  }
-
-  initCountUp();
-
-(function initHeroSphere() {
-  const canvas = document.getElementById("heroSphereCanvas");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-
-  const holder = canvas.parentElement;
-  const root = document.documentElement;
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  let width = 0;
-  let height = 0;
-  let raf = null;
-  let points = [];
-  let resizeFrame = null;
-
-  const pointer = {
-    x: 0,
-    y: 0,
-    active: false
-  };
-
-  function getCssVar(name, fallback = "") {
-    const value = getComputedStyle(root).getPropertyValue(name).trim();
-    return value || fallback;
-  }
-
-  function resize() {
-    const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    width = rect.width;
-    height = rect.height;
-
-    canvas.width = Math.max(1, Math.round(width * dpr));
-    canvas.height = Math.max(1, Math.round(height * dpr));
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    createPoints();
-  }
-
-  function createPoints() {
-    points = [];
-
-    const count = width < 320 ? 140 : 230;
-    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-
-    for (let i = 0; i < count; i += 1) {
-      const t = i / count;
-      const y = 1 - t * 2;
-      const radius = Math.sqrt(Math.max(0, 1 - y * y));
-      const theta = goldenAngle * i;
-
-      points.push({
-        x: Math.cos(theta) * radius,
-        y,
-        z: Math.sin(theta) * radius,
-        size: Math.random() * 2 + 1,
-        phase: Math.random() * Math.PI * 2
-      });
+      return;
     }
-  }
 
-  function draw(time) {
-    const accent = getCssVar("--accent", "#2563EB");
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
 
-    ctx.clearRect(0, 0, width, height);
+          const el = entry.target;
 
-    const cx = width / 2;
-    const cy = height / 2;
-    const sphereRadius = Math.min(width, height) * 0.42;
+          if (!el.dataset.animated) {
+            el.dataset.animated = "true";
+            animateCounter(el);
+          }
 
-    const rotY = time * 0.00022;
-    const rotX = -0.35;
+          obs.unobserve(el);
+        });
+      },
+      {
+        threshold: 0.5,
+      }
+    );
 
-    points.forEach((p) => {
-      const x = p.x;
-      const y = p.y;
-      const z = p.z;
+    counters.forEach((counter) => {
+      observer.observe(counter);
+    });
+  })();
 
-      const x1 = x * Math.cos(rotY) - z * Math.sin(rotY);
-      const z1 = x * Math.sin(rotY) + z * Math.cos(rotY);
+  // 13) Hero sphere canvas
+  (function initHeroSphere() {
+    const canvas = document.getElementById("heroSphereCanvas");
+    if (!canvas) return;
 
-      const y2 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
-      const z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-      const perspective = 1 / (1.9 - z2);
+    const holder = canvas.parentElement;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-      let px = cx + x1 * sphereRadius * perspective;
-      let py = cy + y2 * sphereRadius * perspective;
+    let width = 0;
+    let height = 0;
+    let raf = null;
+    let points = [];
+    let resizeFrame = null;
 
-      if (pointer.active) {
-        const dx = px - pointer.x;
-        const dy = py - pointer.y;
-        const distance = Math.max(1, Math.hypot(dx, dy));
+    const pointer = {
+      x: 0,
+      y: 0,
+      active: false,
+    };
 
-        if (distance < 120) {
-          const force = (1 - distance / 120) * 16;
-          px += (dx / distance) * force;
-          py += (dy / distance) * force;
+    function getCssVar(name, fallback = "") {
+      const value = getComputedStyle(root).getPropertyValue(name).trim();
+      return value || fallback;
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      width = rect.width;
+      height = rect.height;
+
+      canvas.width = Math.max(1, Math.round(width * dpr));
+      canvas.height = Math.max(1, Math.round(height * dpr));
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      createPoints();
+    }
+
+    function createPoints() {
+      points = [];
+
+      const count = width < 320 ? 140 : 230;
+      const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+
+      for (let i = 0; i < count; i += 1) {
+        const t = i / count;
+        const y = 1 - t * 2;
+        const radius = Math.sqrt(Math.max(0, 1 - y * y));
+        const theta = goldenAngle * i;
+
+        points.push({
+          x: Math.cos(theta) * radius,
+          y,
+          z: Math.sin(theta) * radius,
+          size: Math.random() * 2 + 1,
+          phase: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+
+    function draw(time) {
+      const accent = getCssVar("--accent", "#2563EB");
+
+      ctx.clearRect(0, 0, width, height);
+
+      const cx = width / 2;
+      const cy = height / 2;
+      const sphereRadius = Math.min(width, height) * 0.42;
+
+      const rotY = time * 0.00022;
+      const rotX = -0.35;
+
+      points.forEach((p) => {
+        const x = p.x;
+        const y = p.y;
+        const z = p.z;
+
+        const x1 = x * Math.cos(rotY) - z * Math.sin(rotY);
+        const z1 = x * Math.sin(rotY) + z * Math.cos(rotY);
+
+        const y2 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+        const z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+
+        const perspective = 1 / (1.9 - z2);
+
+        let px = cx + x1 * sphereRadius * perspective;
+        let py = cy + y2 * sphereRadius * perspective;
+
+        if (pointer.active) {
+          const dx = px - pointer.x;
+          const dy = py - pointer.y;
+          const distance = Math.max(1, Math.hypot(dx, dy));
+
+          if (distance < 120) {
+            const force = (1 - distance / 120) * 16;
+
+            px += (dx / distance) * force;
+            py += (dy / distance) * force;
+          }
         }
+
+        const pulse = 0.85 + Math.sin(time * 0.0014 + p.phase) * 0.15;
+        const radius = p.size * perspective * pulse;
+        const alpha = 0.18 + ((z2 + 1) / 2) * 0.55;
+
+        ctx.beginPath();
+        ctx.arc(px, py, radius, 0, Math.PI * 2);
+        ctx.fillStyle = accent;
+        ctx.globalAlpha = alpha;
+        ctx.fill();
+      });
+
+      ctx.globalAlpha = 1;
+
+      if (!reduceMotion.matches) {
+        raf = requestAnimationFrame(draw);
+      }
+    }
+
+    function start() {
+      cancelAnimationFrame(raf);
+      resize();
+      draw(0);
+    }
+
+    function scheduleStart() {
+      if (resizeFrame) {
+        cancelAnimationFrame(resizeFrame);
       }
 
-      const pulse = 0.85 + Math.sin(time * 0.0014 + p.phase) * 0.15;
-      const radius = p.size * perspective * pulse;
-      const alpha = 0.18 + ((z2 + 1) / 2) * 0.55;
-
-      ctx.beginPath();
-      ctx.arc(px, py, radius, 0, Math.PI * 2);
-      ctx.fillStyle = accent;
-      ctx.globalAlpha = alpha;
-      ctx.fill();
-    });
-
-    ctx.globalAlpha = 1;
-
-    if (!reduceMotion.matches) {
-      raf = requestAnimationFrame(draw);
+      resizeFrame = requestAnimationFrame(() => {
+        resizeFrame = null;
+        start();
+      });
     }
-  }
 
-  function start() {
-    cancelAnimationFrame(raf);
-    resize();
-    draw(0);
-  }
+    holder.addEventListener("pointermove", (event) => {
+      const rect = canvas.getBoundingClientRect();
 
-  function scheduleStart() {
-    if (resizeFrame) cancelAnimationFrame(resizeFrame);
-
-    resizeFrame = requestAnimationFrame(() => {
-      resizeFrame = null;
-      start();
+      pointer.x = event.clientX - rect.left;
+      pointer.y = event.clientY - rect.top;
+      pointer.active = true;
     });
-  }
 
-  holder.addEventListener("pointermove", (event) => {
-    const rect = canvas.getBoundingClientRect();
+    holder.addEventListener("pointerleave", () => {
+      pointer.active = false;
+    });
 
-    pointer.x = event.clientX - rect.left;
-    pointer.y = event.clientY - rect.top;
-    pointer.active = true;
-  });
+    if ("ResizeObserver" in window) {
+      const resizeObserver = new ResizeObserver(scheduleStart);
+      resizeObserver.observe(holder);
+    }
 
-  holder.addEventListener("pointerleave", () => {
-    pointer.active = false;
-  });
+    window.addEventListener("resize", scheduleStart);
 
-  if ("ResizeObserver" in window) {
-    const resizeObserver = new ResizeObserver(scheduleStart);
-    resizeObserver.observe(holder);
-  }
+    if (reduceMotion.addEventListener) {
+      reduceMotion.addEventListener("change", scheduleStart);
+    }
 
-  window.addEventListener("resize", scheduleStart);
+    start();
+  })();
 
-  if (reduceMotion.addEventListener) {
-    reduceMotion.addEventListener("change", scheduleStart);
-  }
+  // 14) Results manifesto reveal
+  (function initResultsManifestoReveal() {
+    const title = document.querySelector("[data-reveal-title]");
+    const subtitle = document.querySelector("[data-reveal-subtitle]");
+    const rows = Array.from(document.querySelectorAll("[data-reveal-row]"));
 
-  start();
-})();
+    if (!title || !rows.length) return;
 
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const showEverything = () => {
+      title.classList.add("is-visible");
+
+      if (subtitle) {
+        subtitle.classList.add("is-visible");
+      }
+
+      rows.forEach((row) => {
+        row.classList.add("is-visible");
+
+        const counter = row.querySelector("[data-count]");
+
+        if (counter) {
+          counter.textContent = counter.dataset.count;
+          counter.dataset.animated = "true";
+        }
+      });
+    };
+
+    const animateCounter = (el) => {
+      if (!el || el.dataset.animated === "true") return;
+
+      el.dataset.animated = "true";
+
+      const target = Number(el.dataset.count);
+      const duration = 850;
+      const startTime = performance.now();
+
+      const frame = (now) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+
+        el.textContent = Math.round(target * eased);
+
+        if (progress < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          el.textContent = target;
+        }
+      };
+
+      requestAnimationFrame(frame);
+    };
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      showEverything();
+      return;
+    }
+
+    const titleObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          title.classList.add("is-visible");
+
+          if (subtitle) {
+            setTimeout(() => {
+              subtitle.classList.add("is-visible");
+            }, 140);
+          }
+
+          titleObserver.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.28,
+        rootMargin: "0px 0px -12% 0px",
+      }
+    );
+
+    titleObserver.observe(title);
+
+    const rowObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const row = entry.target;
+          const counter = row.querySelector("[data-count]");
+
+          row.classList.add("is-visible");
+          animateCounter(counter);
+
+          rowObserver.unobserve(row);
+        });
+      },
+      {
+        threshold: 0.34,
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    rows.forEach((row) => {
+      const counter = row.querySelector("[data-count]");
+
+      if (counter) {
+        counter.textContent = "0";
+        counter.dataset.animated = "false";
+      }
+
+      rowObserver.observe(row);
+    });
+  })();
 })();
