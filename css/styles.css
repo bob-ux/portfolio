@@ -1087,23 +1087,18 @@ html[data-theme="dark"] .case-thumb::after{
   display:grid;
   grid-template-columns:minmax(0, .92fr) minmax(420px, 1fr);
   min-height:430px;
-  border:1px solid var(--border);
+  border:0;
   border-radius:36px;
-  background:
-    radial-gradient(circle at 78% 18%, color-mix(in srgb, var(--case-accent) 13%, transparent), transparent 38%),
-    linear-gradient(145deg, var(--case-surface), color-mix(in srgb, var(--case-surface) 72%, var(--card)));
-  box-shadow:var(--shadow-base);
+  background:var(--case-surface);
+  box-shadow:none;
   color:var(--text);
   transition:
     transform .22s ease,
-    box-shadow .22s ease,
-    border-color .22s ease;
+    background-color .22s ease;
 }
 
 .featured-case:hover{
   transform:translateY(-3px);
-  border-color:var(--border2);
-  box-shadow:var(--shadow-hover);
 }
 
 .featured-case__copy{
@@ -1147,7 +1142,8 @@ html[data-theme="dark"] .case-thumb::after{
   min-height:32px;
   padding:8px 13px;
   border-radius:999px;
-  background:color-mix(in srgb, var(--card) 82%, var(--case-surface));
+  border:1px solid color-mix(in srgb, var(--case-accent) 20%, transparent);
+  background:color-mix(in srgb, var(--card) 74%, var(--case-surface));
   color:var(--text);
   font-size:14px;
   line-height:1;
@@ -1176,11 +1172,11 @@ html[data-theme="dark"] .case-thumb::after{
   justify-self:center;
   width:min(82%, 640px);
   aspect-ratio:16 / 10;
-  padding:16px;
-  border:1px solid var(--preview-border);
+  padding:14px;
+  border:0;
   border-radius:28px;
   background:var(--preview-bg);
-  transform:rotate(-1deg);
+  transform:none;
 }
 
 .featured-case__screen img{
@@ -1203,17 +1199,17 @@ html[data-theme="dark"] .featured-case{
 
 /* Individual case accents */
 .featured-case--ds{
-  --case-surface:color-mix(in srgb, #EF4444 9%, var(--card-muted));
+  --case-surface:color-mix(in srgb, #EF4444 9%, var(--case-a));
   --case-accent:#EF4444;
 }
 
 .featured-case--payments{
-  --case-surface:color-mix(in srgb, #2563EB 9%, var(--card-muted));
+  --case-surface:color-mix(in srgb, #2563EB 9%, var(--case-b));
   --case-accent:#2563EB;
 }
 
 .featured-case--analytics{
-  --case-surface:color-mix(in srgb, #0891B2 9%, var(--card-muted));
+  --case-surface:color-mix(in srgb, #0891B2 9%, var(--case-c));
   --case-accent:#0891B2;
 }
 
@@ -1230,9 +1226,7 @@ html[data-theme="dark"] .featured-case{
   --preview-shadow:rgba(0,0,0,.38);
   --preview-highlight:rgba(255,255,255,.04);
 
-  background:
-    radial-gradient(circle at 78% 18%, color-mix(in srgb, var(--case-accent) 15%, transparent), transparent 38%),
-    linear-gradient(145deg, color-mix(in srgb, var(--case-accent) 10%, var(--case-surface)), var(--case-surface));
+  background:var(--case-surface);
   color:#F9FAFB;
 }
 
@@ -1242,7 +1236,8 @@ html[data-theme="dark"] .featured-case{
 }
 
 .featured-case--dark .featured-case__tags span{
-  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.16);
+  background:rgba(255,255,255,.08);
   color:#F9FAFB;
 }
 

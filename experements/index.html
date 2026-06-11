@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Прототип карточек кейсов</title>
+  <style>
+    :root{
+      --bg:#FFFFFF;
+      --card:#FFFFFF;
+      --card-soft:#F8FAFF;
+      --card-muted:#E9EEF8;
+      --card-strong:#0A1020;
+      --card-strong-text:#FFFFFF;
+      --text:#111827;
+      --muted:#4B5563;
+      --muted2:#6B7280;
+      --accent:#2563EB;
+      --accent-text:#FFFFFF;
+      --accent-soft:rgba(37,99,235,.12);
+      --border:rgba(17,24,39,.10);
+      --border2:rgba(17,24,39,.14);
+      --border-strong:rgba(17,24,39,.18);
+      --case-a:#EEF2FF;
+      --case-b:#EAF1FF;
+      --case-c:#EEF8FF;
+      --case-dark:#0A1020;
+    }
+
+    html[data-theme="dark"]{
+      --bg:#080C16;
+      --card:#111827;
+      --card-soft:#162033;
+      --card-muted:#1B2740;
+      --card-strong:#F3F4F6;
+      --card-strong-text:#0F172A;
+      --text:#F9FAFB;
+      --muted:#AAB3C2;
+      --muted2:#7D899C;
+      --accent:#60A5FA;
+      --accent-text:#07111F;
+      --accent-soft:rgba(96,165,250,.15);
+      --border:rgba(255,255,255,.11);
+      --border2:rgba(255,255,255,.15);
+      --border-strong:rgba(255,255,255,.22);
+      --case-a:#18213A;
+      --case-b:#14213D;
+      --case-c:#11283A;
+      --case-dark:#070B14;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition:background-color .22s ease, color .22s ease;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .page{
+      width:min(1200px, calc(100% - 40px));
+      margin:0 auto;
+      padding:64px 0 96px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:24px;
+      margin-bottom:28px;
+    }
+
+    .section-title__copy{
+      max-width:420px;
+    }
+
+    .section-title h1{
+      margin:0;
+      font-family:ui-serif, Georgia, Cambria, "Times New Roman", serif;
+      font-size:clamp(40px, 6vw, 76px);
+      line-height:.95;
+      letter-spacing:-.04em;
+      font-weight:500;
+    }
+
+    .section-title p{
+      margin:0 0 8px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.55;
+    }
+
+    .theme-switch{
+      width:56px;
+      height:40px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-top:18px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:var(--card);
+      cursor:pointer;
+      transition:transform .18s ease, border-color .22s ease, background-color .22s ease;
+    }
+
+    .theme-switch:hover{
+      transform:translateY(-1px);
+      border-color:var(--border2);
+    }
+
+    .theme-switch:active{
+      transform:translateY(0);
+    }
+
+    .theme-switch:focus-visible{
+      outline:3px solid var(--accent-soft);
+      outline-offset:3px;
+    }
+
+    .theme-switch .switch-track{
+      position:relative;
+      width:48px;
+      height:24px;
+      border:1px solid rgba(17,24,39,.10);
+      border-radius:999px;
+      background:rgba(17,24,39,.06);
+      transition:background-color .22s ease, border-color .22s ease;
+    }
+
+    html[data-theme="dark"] .theme-switch .switch-track{
+      border-color:rgba(255,255,255,.16);
+      background:rgba(255,255,255,.10);
+    }
+
+    .theme-switch .switch-thumb{
+      position:absolute;
+      top:50%;
+      left:2px;
+      width:20px;
+      height:20px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:var(--bg);
+      transform:translate3d(0,-50%,0);
+      transition:transform .28s cubic-bezier(.2,.85,.2,1.15), background-color .22s ease, border-color .22s ease;
+    }
+
+    html[data-theme="dark"] .theme-switch .switch-thumb{
+      transform:translate3d(24px,-50%,0);
+    }
+
+    .featured-case-list{
+      display:grid;
+      gap:24px;
+    }
+
+    .featured-case{
+      --case-surface:var(--card-muted);
+      --case-accent:#2563EB;
+      --case-border:color-mix(in srgb, var(--case-accent) 18%, var(--border));
+      --preview-bg:#FFFFFF;
+      --preview-inner:#F8FAFC;
+      --preview-border:rgba(15,23,42,.08);
+
+      position:relative;
+      overflow:hidden;
+      display:grid;
+      grid-template-columns:minmax(0, .92fr) minmax(420px, 1fr);
+      min-height:430px;
+      border:0;
+      border-radius:36px;
+      background:var(--case-surface);
+      color:var(--text);
+      transition:transform .22s ease, border-color .22s ease;
+    }
+
+    .featured-case:hover{
+      transform:translateY(-3px);
+    }
+
+    .featured-case__copy{
+      position:relative;
+      z-index:2;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      min-width:0;
+      padding:44px 42px;
+    }
+
+    .featured-case__eyebrow{
+      margin:0 0 28px;
+      color:var(--muted2);
+      font-size:15px;
+      line-height:1.4;
+    }
+
+    .featured-case__title{
+      max-width:12ch;
+      margin:0 0 22px;
+      font-family:ui-serif, Georgia, Cambria, "Times New Roman", serif;
+      font-size:clamp(34px, 4vw, 50px);
+      line-height:1.04;
+      letter-spacing:-.045em;
+      font-weight:500;
+      color:inherit;
+    }
+
+    .featured-case__tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:28px;
+    }
+
+    .featured-case__tags span{
+      display:inline-flex;
+      align-items:center;
+      min-height:32px;
+      padding:8px 13px;
+      border:1px solid color-mix(in srgb, var(--case-accent) 20%, transparent);
+      border-radius:999px;
+      background:color-mix(in srgb, var(--card) 74%, var(--case-surface));
+      color:var(--text);
+      font-size:14px;
+      line-height:1;
+    }
+
+    .featured-case__desc{
+      max-width:620px;
+      margin:0 0 auto;
+      color:var(--text);
+      font-size:17px;
+      line-height:1.58;
+    }
+
+    .featured-case__link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      margin-top:44px;
+      padding:0 18px;
+      border:1px solid color-mix(in srgb, var(--text) 72%, transparent);
+      border-radius:999px;
+      background:transparent;
+      color:var(--text);
+      font-size:15px;
+      line-height:1;
+    }
+
+    .featured-case__screen{
+      position:relative;
+      z-index:1;
+      align-self:center;
+      justify-self:center;
+      width:min(82%, 640px);
+      aspect-ratio:16 / 10;
+      padding:14px;
+      border:0;
+      border-radius:28px;
+      background:var(--preview-bg);
+    }
+
+    .featured-case__screen img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      border-radius:18px;
+      background:var(--preview-inner);
+    }
+
+    .featured-case--ds{
+      --case-surface:color-mix(in srgb, #EF4444 9%, var(--case-a));
+      --case-accent:#EF4444;
+    }
+
+    .featured-case--payments{
+      --case-surface:color-mix(in srgb, #2563EB 9%, var(--case-b));
+      --case-accent:#2563EB;
+    }
+
+    .featured-case--analytics{
+      --case-surface:color-mix(in srgb, #0891B2 9%, var(--case-c));
+      --case-accent:#0891B2;
+    }
+
+    html[data-theme="dark"] .featured-case{
+      --preview-bg:#101827;
+      --preview-inner:#0B1220;
+      --preview-border:rgba(255,255,255,.10);
+    }
+
+    .featured-case--dashboards{
+      --case-surface:var(--case-dark);
+      --case-accent:#22D3EE;
+      --preview-bg:#101827;
+      --preview-inner:#0B1220;
+      --preview-border:rgba(255,255,255,.10);
+      color:#F9FAFB;
+    }
+
+    .featured-case--dashboards .featured-case__eyebrow,
+    .featured-case--dashboards .featured-case__desc{
+      color:rgba(249,250,251,.72);
+    }
+
+    .featured-case--dashboards .featured-case__tags span{
+      border-color:rgba(255,255,255,.16);
+      background:rgba(255,255,255,.08);
+      color:#F9FAFB;
+    }
+
+    .featured-case--dashboards .featured-case__screen{
+      border-color:transparent;
+    }
+
+    .featured-case--dashboards .featured-case__link{
+      border-color:rgba(255,255,255,.72);
+      color:#F9FAFB;
+    }
+
+    @media (max-width:960px){
+      .section-title{
+        display:block;
+      }
+
+      .section-title p{
+        margin-top:18px;
+      }
+
+      .featured-case{
+        grid-template-columns:1fr;
+      }
+
+      .featured-case__title{
+        max-width:none;
+      }
+
+      .featured-case__screen{
+        width:calc(100% - 48px);
+        margin:0 24px 24px;
+        aspect-ratio:16 / 9;
+      }
+    }
+
+    @media (max-width:640px){
+      .page{
+        width:min(100% - 28px, 1200px);
+        padding:40px 0 64px;
+      }
+
+      .featured-case{
+        min-height:auto;
+        border-radius:28px;
+      }
+
+      .featured-case__copy{
+        padding:34px 26px;
+      }
+
+      .featured-case__eyebrow{
+        margin-bottom:18px;
+      }
+
+      .featured-case__title{
+        font-size:34px;
+      }
+
+      .featured-case__tags{
+        margin-bottom:22px;
+      }
+
+      .featured-case__desc{
+        font-size:16px;
+      }
+
+      .featured-case__link{
+        width:100%;
+        margin-top:32px;
+      }
+
+      .featured-case__screen{
+        width:calc(100% - 36px);
+        margin:0 18px 18px;
+        padding:10px;
+        border-radius:22px;
+        aspect-ratio:16 / 10;
+      }
+
+      .featured-case__screen img{
+        border-radius:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="section-title">
+      <h1>Ключевые кейсы</h1>
+      <div class="section-title__copy">
+        <p>Прототип более чистых карточек: те же акцентные цвета, но без градиентов, тяжёлых теней и наклона скриншотов.</p>
+        <button class="theme-switch" type="button" aria-label="Переключить тему" aria-pressed="false">
+          <span class="switch-track" aria-hidden="true">
+            <span class="switch-thumb"></span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section class="featured-case-list" aria-label="Ключевые кейсы">
+      <a class="featured-case featured-case--ds" href="/case-ds-moex/">
+        <div class="featured-case__copy">
+          <p class="featured-case__eyebrow">UX/UI Designer | Май 2024 — Ноябрь 2025</p>
+          <h2 class="featured-case__title">Дизайн-система для продуктовых команд</h2>
+          <div class="featured-case__tags">
+            <span>Design System</span>
+            <span>Tokens</span>
+            <span>Components</span>
+            <span>Design Review</span>
+          </div>
+          <p class="featured-case__desc">44 компонента, 9 групп токенов и единые UX-паттерны для снижения разрозненности интерфейсов и ускорения работы продуктовых команд.</p>
+          <span class="featured-case__link">Смотреть кейс</span>
+        </div>
+        <div class="featured-case__screen">
+          <img src="../assets/img/moex.webp" alt="Дизайн-система Московской Биржи">
+        </div>
+      </a>
+
+      <a class="featured-case featured-case--payments" href="/case-cbr-payments/">
+        <div class="featured-case__copy">
+          <p class="featured-case__eyebrow">UX/UI Designer | Январь 2020 — Октябрь 2021</p>
+          <h2 class="featured-case__title">Платёжная система Банка России</h2>
+          <div class="featured-case__tags">
+            <span>Forms</span>
+            <span>Roles</span>
+            <span>Validation</span>
+            <span>Flows</span>
+          </div>
+          <p class="featured-case__desc">Формы, статусы, права доступа и операционные сценарии для внутреннего продукта, где ошибка при работе с данными может быть критичной.</p>
+          <span class="featured-case__link">Смотреть кейс</span>
+        </div>
+        <div class="featured-case__screen">
+          <img src="../assets/img/case-cbr-payments/Form.webp" alt="Форма платёжной системы Банка России">
+        </div>
+      </a>
+
+      <a class="featured-case featured-case--analytics" href="/case-analytics-system/">
+        <div class="featured-case__copy">
+          <p class="featured-case__eyebrow">UX/UI Designer | Июнь 2023 — Май 2024</p>
+          <h2 class="featured-case__title">Система мониторинга национальных показателей</h2>
+          <div class="featured-case__tags">
+            <span>Analytics</span>
+            <span>Roles</span>
+            <span>UX Architecture</span>
+            <span>Data-heavy UX</span>
+          </div>
+          <p class="featured-case__desc">6 разделов и 4 пользовательские роли в аналитической платформе, где нужно было структурировать сложную логику, данные и сценарии.</p>
+          <span class="featured-case__link">Смотреть кейс</span>
+        </div>
+        <div class="featured-case__screen">
+          <img src="../assets/img/case-analytics-system/Dashboard.webp" alt="Аналитическая система мониторинга показателей">
+        </div>
+      </a>
+
+      <a class="featured-case featured-case--dashboards" href="/case-dashboards/">
+        <div class="featured-case__copy">
+          <p class="featured-case__eyebrow">UX/UI Designer | Октябрь 2021 — Май 2023</p>
+          <h2 class="featured-case__title">Управленческие дашборды для руководителей</h2>
+          <div class="featured-case__tags">
+            <span>Data Viz</span>
+            <span>KPI</span>
+            <span>Executive UI</span>
+            <span>Decision-making</span>
+          </div>
+          <p class="featured-case__desc">35 дашбордов для руководителей и заместителей, где важно быстро считывать показатели, сравнивать данные и принимать управленческие решения.</p>
+          <span class="featured-case__link">Смотреть кейс</span>
+        </div>
+        <div class="featured-case__screen">
+          <img src="../assets/img/case-dashboards/Main.webp" alt="Управленческий дашборд">
+        </div>
+      </a>
+    </section>
+  </main>
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const themeBtn = document.querySelector(".theme-switch");
+
+      function safeStorageGet(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function safeStorageSet(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch (error) {
+          /* Theme persistence is optional for the prototype. */
+        }
+      }
+
+      function getPreferredTheme() {
+        const saved = safeStorageGet("theme");
+
+        if (saved === "light" || saved === "dark") {
+          return saved;
+        }
+
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        return prefersDark ? "dark" : "light";
+      }
+
+      function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        safeStorageSet("theme", theme);
+
+        if (themeBtn) {
+          themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
+        }
+      }
+
+      applyTheme(getPreferredTheme());
+
+      if (themeBtn) {
+        themeBtn.addEventListener("click", function () {
+          const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+          applyTheme(current === "dark" ? "light" : "dark");
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
