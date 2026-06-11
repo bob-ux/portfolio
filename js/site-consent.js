@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     el.innerHTML = `
       <div class="cookie-banner__text">
         На сайте используются cookies и сервисы аналитики для улучшения работы сайта.
-        Продолжая использование сайта, вы соглашаетесь с
+        Нажимая «Хорошо», вы соглашаетесь с
         <a href="/privacy/">политикой конфиденциальности</a>.
       </div>
       <button class="btn primary cookie-banner__btn" id="cookieAcceptBtn" type="button">
