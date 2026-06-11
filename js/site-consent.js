@@ -1,29 +1,73 @@
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("cookie banner script loaded");
+  const CONSENT_KEY = "cookie_consent_accepted";
 
-  const banner = document.getElementById("cookieBanner");
-  const acceptBtn = document.getElementById("cookieAcceptBtn");
-
-  console.log("banner =", banner);
-  console.log("acceptBtn =", acceptBtn);
-
-  if (!banner || !acceptBtn) {
-    console.log("banner elements not found");
-    return;
+  function safeGet(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (error) {
+      return null;
+    }
   }
 
-  const accepted = localStorage.getItem("cookie_consent_accepted");
-  console.log("accepted =", accepted);
+  function safeSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 
-  if (accepted === "true") {
+  function createBanner() {
+    const el = document.createElement("div");
+    el.className = "cookie-banner";
+    el.id = "cookieBanner";
+    el.innerHTML = `
+      <div class="cookie-banner__text">
+        На сайте используются cookies и сервисы аналитики для улучшения работы сайта.
+        Продолжая использование сайта, вы соглашаетесь с
+        <a href="/privacy/">политикой конфиденциальности</a>.
+      </div>
+      <button class="btn primary cookie-banner__btn" id="cookieAcceptBtn" type="button">
+        Хорошо
+      </button>
+    `;
+
+    document.body.appendChild(el);
+    return el;
+  }
+
+  const banner = document.getElementById("cookieBanner") || createBanner();
+  const acceptBtn = document.getElementById("cookieAcceptBtn");
+  const accepted = safeGet(CONSENT_KEY) === "true";
+
+  function hideBanner() {
+    banner.hidden = true;
     banner.style.display = "none";
-  } else {
+  }
+
+  function showBanner() {
+    banner.hidden = false;
     banner.style.display = "flex";
   }
 
+  if (accepted) {
+    hideBanner();
+    if (window.loadSiteAnalytics) {
+      window.loadSiteAnalytics();
+    }
+  } else {
+    showBanner();
+  }
+
+  if (!acceptBtn) return;
+
   acceptBtn.addEventListener("click", function () {
-    console.log("clicked");
-    localStorage.setItem("cookie_consent_accepted", "true");
-    banner.style.display = "none";
+    safeSet(CONSENT_KEY, "true");
+    hideBanner();
+
+    if (window.loadSiteAnalytics) {
+      window.loadSiteAnalytics();
+    }
   });
 });

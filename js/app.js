@@ -1,17 +1,37 @@
 (async function () {
   const root = document.documentElement;
 
+  function safeStorageGet(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function safeStorageSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (error) {
+      // Theme persistence is optional; the UI should keep working without storage.
+    }
+  }
+
   async function inject(selector, url) {
     const el = document.querySelector(selector);
     if (!el) return;
 
     const res = await fetch(url, { cache: "no-cache" });
+    if (!res.ok) return;
+
     el.innerHTML = await res.text();
   }
 
   // 1) Inject partials
-  await inject("#site-header", "/partials/header.html");
-  await inject("#site-footer", "/partials/footer.html");
+  await Promise.allSettled([
+    inject("#site-header", "/partials/header.html"),
+    inject("#site-footer", "/partials/footer.html"),
+  ]);
 
   const pathname = location.pathname.toLowerCase();
   const isHomePage = pathname === "/" || pathname === "/index.html";
@@ -27,7 +47,7 @@
   const themeBtn = document.querySelector(".theme-switch");
 
   function getPreferredTheme() {
-    const saved = localStorage.getItem("theme");
+    const saved = safeStorageGet("theme");
 
     if (saved === "light" || saved === "dark") {
       return saved;
@@ -42,7 +62,7 @@
 
   function applyTheme(theme) {
     root.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
+    safeStorageSet("theme", theme);
 
     if (themeBtn) {
       themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
@@ -223,35 +243,7 @@
     onScroll();
   }
 
-  // 7) Highlight case cards on scroll
-  if (isHomePage) {
-    const caseCards = document.querySelectorAll(".case-card");
-
-    if (caseCards.length && "IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-
-            caseCards.forEach((c) => {
-              c.classList.remove("is-active");
-            });
-
-            entry.target.classList.add("is-active");
-          });
-        },
-        {
-          threshold: 0.6,
-        }
-      );
-
-      caseCards.forEach((card) => {
-        observer.observe(card);
-      });
-    }
-  }
-
-  // 8) Back to top
+  // 7) Back to top
   (function initBackToTop() {
     const existing = document.querySelector(".back-to-top");
     if (existing) return;
@@ -308,7 +300,7 @@
     update();
   })();
 
-  // 9) Component filters
+  // 8) Component filters
   (function initComponentFilters() {
     const bar = document.querySelector(".filter-bar");
     const buttons = Array.from(document.querySelectorAll(".filter-btn"));
@@ -408,7 +400,7 @@
     });
   })();
 
-  // 10) Lightbox
+  // 9) Lightbox
   (function initLightbox() {
     const images = document.querySelectorAll(".zoomable img");
     if (!images.length) return;
@@ -456,7 +448,7 @@
     });
   })();
 
-  // 11) Single open details
+  // 10) Single open details
   (function initSingleOpenDetails() {
     const scope = document.getElementById("documentation") || document;
     const detailsList = Array.from(scope.querySelectorAll("details"));
@@ -476,72 +468,7 @@
     });
   })();
 
-  // 12) Old proof count-up animation
-  // Можно удалить, когда старый блок .proof-impact-card точно убран со всех страниц.
-  (function initCountUp() {
-    const counters = document.querySelectorAll(".proof-impact-card__value[data-count]");
-    if (!counters.length) return;
-
-    const animateCounter = (el) => {
-      const target = parseInt(el.dataset.count, 10);
-      if (Number.isNaN(target)) return;
-
-      const duration = 1200;
-      const startTime = performance.now();
-
-      function update(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const value = Math.round(target * eased);
-
-        el.textContent = value;
-
-        if (progress < 1) {
-          requestAnimationFrame(update);
-        } else {
-          el.textContent = target;
-          el.classList.add("is-done");
-        }
-      }
-
-      requestAnimationFrame(update);
-    };
-
-    if (!("IntersectionObserver" in window)) {
-      counters.forEach((counter) => {
-        counter.textContent = counter.dataset.count;
-      });
-
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-
-          const el = entry.target;
-
-          if (!el.dataset.animated) {
-            el.dataset.animated = "true";
-            animateCounter(el);
-          }
-
-          obs.unobserve(el);
-        });
-      },
-      {
-        threshold: 0.5,
-      }
-    );
-
-    counters.forEach((counter) => {
-      observer.observe(counter);
-    });
-  })();
-
-  // 13) Hero sphere canvas
+  // 11) Hero sphere canvas
   (function initHeroSphere() {
     const canvas = document.getElementById("heroSphereCanvas");
     if (!canvas) return;
@@ -708,7 +635,7 @@
     start();
   })();
 
-  // 14) Results manifesto reveal
+  // 12) Results manifesto reveal
   (function initResultsManifestoReveal() {
     const title = document.querySelector("[data-reveal-title]");
     const subtitle = document.querySelector("[data-reveal-subtitle]");

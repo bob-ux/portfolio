@@ -2555,7 +2555,7 @@ html[data-theme="dark"] .filter-btn.is-active{
   right:24px;
   bottom:24px;
   z-index:200;
-  display:flex;
+  display:none;
   align-items:center;
   justify-content:space-between;
   gap:16px;
@@ -2567,6 +2567,10 @@ html[data-theme="dark"] .filter-btn.is-active{
   background:rgba(255,255,255,.96);
   box-shadow:var(--shadow-hover);
   backdrop-filter:blur(10px);
+}
+
+.cookie-banner[hidden]{
+  display:none !important;
 }
 
 .cookie-banner__text{
