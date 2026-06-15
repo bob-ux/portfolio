@@ -684,7 +684,7 @@ html[data-theme="dark"] .mobile-link:hover{
 
 /* Hero metrics */
 .hero-metrics{
-  margin:clamp(56px, 6vw, 80px) 0 clamp(88px, 9vw, 128px);
+  margin:clamp(56px, 6vw, 80px) 0 clamp(20px, 3vw, 32px);
 }
 
 .hero-metrics__grid{
@@ -803,7 +803,7 @@ html[data-theme="dark"] .mobile-link:hover{
   }
 
   .hero-metrics{
-    margin:48px 0 80px;
+    margin:48px 0 28px;
   }
 
   .hero-metrics__grid{
