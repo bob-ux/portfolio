@@ -388,7 +388,7 @@ html[data-theme="dark"] .navlinks a:hover{
 
 .theme-switch:focus-visible{
   outline:none;
-  box-shadow:0 0 0 4px rgba(43,91,234,.20), var(--shadow-base);
+  box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent), var(--shadow-base);
 }
 
 .theme-switch .switch-track{
@@ -430,7 +430,7 @@ html[data-theme="dark"] .theme-switch .switch-thumb{
 }
 
 .theme-switch:hover .switch-track{
-  box-shadow:inset 0 0 0 999px rgba(43,91,234,.04);
+  box-shadow:inset 0 0 0 999px color-mix(in srgb, var(--accent) 4%, transparent);
 }
 
 html[data-theme="dark"] .theme-switch:hover .switch-track{
@@ -1739,7 +1739,7 @@ html[data-theme="dark"] .toc a:hover{
 
 .toc a.active{
   color:var(--text);
-  background:rgba(43,91,234,.06);
+  background:color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 html[data-theme="dark"] .toc a.active{
@@ -2458,7 +2458,7 @@ html[data-theme="dark"] .logo-item img{
 
 .filter-btn:focus-visible{
   outline:none;
-  box-shadow:0 0 0 4px rgba(43,91,234,.20), var(--shadow-base);
+  box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent), var(--shadow-base);
 }
 
 .filter-btn.is-active{
@@ -2493,7 +2493,7 @@ html[data-theme="dark"] .filter-btn.is-active{
 .component-item:hover{
   transform:translateY(-4px) scale(1.02);
   box-shadow:var(--shadow-hover);
-  border-color:rgba(43,91,234,.16);
+  border-color:color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
 .component-item img{
@@ -2754,7 +2754,7 @@ footer a:hover{
 
 .back-to-top:focus-visible{
   outline:none;
-  box-shadow:0 0 0 4px rgba(43,91,234,.20), var(--shadow-base);
+  box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent), var(--shadow-base);
 }
 
 .back-to-top.is-visible{
