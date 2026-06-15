@@ -749,4 +749,57 @@
       rowObserver.observe(row);
     });
   })();
+
+  // 17) Business problems carousel
+  (function initBusinessProblemsCarousel() {
+    const carousel = document.querySelector("[data-business-problems]");
+    if (!carousel) return;
+
+    const title = carousel.querySelector("[data-business-title]");
+    const text = carousel.querySelector("[data-business-text]");
+    const tabs = Array.from(carousel.querySelectorAll("[data-business-tab]"));
+
+    if (!title || !text || !tabs.length) return;
+
+    const items = [
+      {
+        title: "Ошибки и риски",
+        text: "Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.",
+      },
+      {
+        title: "Консистентность и стоимость изменений",
+        text: "Помогаю продуктам расти через дизайн-системы, единые паттерны и управляемые правила изменений.",
+      },
+      {
+        title: "Скорость согласований и реализации",
+        text: "Убираю лишнюю неопределенность, чтобы команда быстрее принимала решения и стабильнее доводила их до релиза.",
+      },
+      {
+        title: "Понятность интерфейсов с данными",
+        text: "Превращаю сложные аналитические и операционные интерфейсы в инструменты, где главное считывается быстро.",
+      },
+    ];
+
+    function setActive(index) {
+      const item = items[index];
+      if (!item) return;
+
+      title.textContent = item.title;
+      text.textContent = item.text;
+
+      tabs.forEach((tab, tabIndex) => {
+        const isActive = tabIndex === index;
+        tab.classList.toggle("is-active", isActive);
+        tab.setAttribute("aria-selected", String(isActive));
+      });
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        setActive(Number(tab.dataset.businessTab));
+      });
+    });
+
+    setActive(0);
+  })();
 })();

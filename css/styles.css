@@ -690,16 +690,15 @@ html[data-theme="dark"] .mobile-link:hover{
 .hero-metrics__grid{
   display:grid;
   grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap:0;
+  gap:var(--space-2);
 }
 
 .hero-metrics__item{
   min-width:0;
-  padding-right:48px;
-}
-
-.hero-metrics__item + .hero-metrics__item{
-  padding-left:48px;
+  min-height:168px;
+  padding:var(--space-3);
+  border-radius:var(--radius);
+  background:var(--card-soft);
 }
 
 .hero-metrics__title{
@@ -732,7 +731,7 @@ html[data-theme="dark"] .mobile-link:hover{
 
 .hero-metrics__text{
   max-width:220px;
-  margin:18px 0 0;
+  margin:22px 0 0;
   color:var(--muted);
   font-size:15px;
   line-height:1.45;
@@ -782,19 +781,7 @@ html[data-theme="dark"] .mobile-link:hover{
 
   .hero-metrics__grid{
     grid-template-columns:repeat(2, minmax(0, 1fr));
-    row-gap:40px;
-  }
-
-  .hero-metrics__item{
-    padding:0 34px 0 0;
-  }
-
-  .hero-metrics__item + .hero-metrics__item{
-    padding-left:34px;
-  }
-
-  .hero-metrics__item:nth-child(3){
-    padding-left:0;
+    gap:var(--space-2);
   }
 }
 
@@ -821,13 +808,14 @@ html[data-theme="dark"] .mobile-link:hover{
 
   .hero-metrics__grid{
     grid-template-columns:1fr;
-    gap:34px;
+    gap:var(--space-2);
   }
 
   .hero-metrics__item,
   .hero-metrics__item + .hero-metrics__item,
   .hero-metrics__item:nth-child(3){
-    padding:0;
+    min-height:auto;
+    padding:var(--space-3);
   }
 }
 
@@ -1428,19 +1416,17 @@ html[data-theme="dark"] .featured-case{
   flex-direction:column;
   min-height:100%;
   overflow:hidden;
-  border:1px solid var(--border);
+  border:0;
   border-radius:32px;
-  background:var(--card-muted);
+  background:var(--card-soft);
   color:var(--text);
   transition:
     transform .22s ease,
-    border-color .22s ease,
     background-color .22s ease;
 }
 
 .other-project-card:hover{
   transform:translateY(-3px);
-  border-color:var(--border2);
 }
 
 .other-project-card__thumb{
@@ -1509,11 +1495,6 @@ html[data-theme="dark"] .featured-case{
 /* Dark theme */
 html[data-theme="dark"] .other-project-card{
   background:var(--card-soft);
-  border-color:var(--border);
-}
-
-html[data-theme="dark"] .other-project-card:hover{
-  border-color:var(--border2);
 }
 
 html[data-theme="dark"] .other-project-card__thumb{
@@ -2368,96 +2349,78 @@ html[data-theme="dark"] .logo-item img{
 /* =========================================================
    14. Business problems block
 ========================================================= */
-.business-problems-grid{
+.business-problems-carousel{
   display:grid;
-  grid-template-columns:repeat(2, 1fr);
-  gap:var(--space-3);
+  grid-template-columns:minmax(0, 1fr) 360px;
+  gap:var(--space-5);
+  padding:var(--space-5);
+  border-radius:calc(var(--radius) + 8px);
+  background:var(--card-soft);
 }
 
-.business-problem-card{
+.business-problems-carousel__stage{
   display:flex;
   flex-direction:column;
-  gap:14px;
-  min-height:220px;
-  padding:24px;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
+  justify-content:space-between;
+  min-height:330px;
+  padding:var(--space-5);
+  border-radius:calc(var(--radius) + 4px);
   background:var(--card);
-  box-shadow:var(--shadow-base);
-  opacity:0;
-  transform:translateY(12px);
-  animation:businessProblemIn .55s ease forwards;
-  transition:
-    transform .22s ease,
-    box-shadow .22s ease,
-    border-color .22s ease;
 }
 
-.business-problem-card:nth-child(1){animation-delay:.04s}
-.business-problem-card:nth-child(2){animation-delay:.10s}
-.business-problem-card:nth-child(3){animation-delay:.16s}
-.business-problem-card:nth-child(4){animation-delay:.22s}
-
-.business-problem-card:hover{
-  transform:translateY(-3px);
-  box-shadow:var(--shadow-hover);
-  border-color:var(--border2);
-}
-
-.business-problem-card__header{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-}
-
-.business-problem-card__icon{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-  width:36px;
-  height:36px;
-  border-radius:10px;
-  background:rgba(17,24,39,.04);
-  color:var(--text);
-  transition:transform .22s ease, color .22s ease, opacity .22s ease;
-}
-
-.business-problem-card__icon svg{
-  display:block;
-  width:18px;
-  height:18px;
-}
-
-.business-problem-card:hover .business-problem-card__icon{
-  transform:translateX(2px) scale(1.06);
-}
-
-html[data-theme="dark"] .business-problem-card__icon{
-  background:rgba(255,255,255,.08);
-}
-
-.business-problem-card__title{
+.business-problems-carousel__title{
+  max-width:720px;
   margin:0;
-  font-size:22px;
-  line-height:1.25;
-  letter-spacing:-.02em;
   color:var(--text);
+  font-size:clamp(34px, 4vw, 50px);
+  line-height:1.04;
+  letter-spacing:-.045em;
+  font-weight:500;
 }
 
-.business-problem-card__desc{
-  margin:0;
-  max-width:60ch;
-  font-size:16px;
-  line-height:1.6;
+.business-problems-carousel__text{
+  max-width:680px;
+  margin:var(--space-3) 0 0;
   color:var(--muted);
+  font-size:clamp(17px, 1.25vw, 20px);
+  line-height:1.6;
 }
 
-@keyframes businessProblemIn{
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+.business-problems-carousel__tabs{
+  display:grid;
+  gap:var(--space-2);
+  align-content:start;
+}
+
+.business-problems-carousel__tab{
+  appearance:none;
+  min-width:0;
+  padding:var(--space-2);
+  border:1px solid transparent;
+  border-radius:var(--radius-sm);
+  background:transparent;
+  color:var(--muted);
+  font:inherit;
+  font-size:15px;
+  line-height:1.35;
+  text-align:left;
+  cursor:pointer;
+  transition:
+    background-color .18s ease,
+    border-color .18s ease,
+    color .18s ease,
+    box-shadow .18s ease;
+}
+
+.business-problems-carousel__tab:hover{
+  color:var(--text);
+}
+
+.business-problems-carousel__tab.is-active{
+  border-color:color-mix(in srgb, var(--accent) 34%, var(--border));
+  background:var(--card);
+  color:var(--text);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 /* =========================================================
@@ -2864,12 +2827,43 @@ html[data-theme="dark"] .back-to-top:hover{
     font-size:40px;
   }
 
-  .business-problems-grid{
+.business-problems-carousel{
     grid-template-columns:1fr;
   }
 
-  .business-problem-card{
+  .business-problems-carousel__tabs{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  .business-problems-carousel__stage{
+    min-height:300px;
+  }
+}
+
+@media (max-width: 760px){
+  .business-problems-carousel{
+    gap:var(--space-3);
+    padding:var(--space-3);
+    border-radius:var(--radius);
+  }
+
+  .business-problems-carousel__stage{
     min-height:auto;
+    padding:var(--space-3);
+    border-radius:var(--radius-sm);
+  }
+
+  .business-problems-carousel__title{
+    font-size:32px;
+  }
+
+  .business-problems-carousel__tabs{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:var(--space-1);
+  }
+
+  .business-problems-carousel__tab{
+    min-height:56px;
   }
 }
 
@@ -2978,14 +2972,6 @@ html[data-theme="dark"] .back-to-top:hover{
 
   .proof-impact-card__metrics{
     min-height:auto;
-  }
-
-  .business-problem-card__title{
-    font-size:22px;
-  }
-
-  .business-problem-card__desc{
-    font-size:15px;
   }
 
   .footer-meta{

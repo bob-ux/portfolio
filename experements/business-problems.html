@@ -1,0 +1,1562 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Прототип блока проблем бизнеса</title>
+  <style>
+    :root{
+      --bg:#FFFFFF;
+      --card:#FFFFFF;
+      --card-soft:#F8FAFF;
+      --card-muted:#E9EEF8;
+      --text:#111827;
+      --muted:#4B5563;
+      --muted2:#6B7280;
+      --accent:#2563EB;
+      --accent-soft:rgba(37,99,235,.12);
+      --border:rgba(17,24,39,.10);
+      --border2:rgba(17,24,39,.14);
+      --border-strong:rgba(17,24,39,.18);
+      --radius:24px;
+      --radius-sm:18px;
+      --radius-xs:12px;
+      --shadow-soft:0 1px 0 rgba(16,24,40,.03), 0 8px 24px rgba(16,24,40,.04);
+      --container:1200px;
+      --space-1:8px;
+      --space-2:16px;
+      --space-3:24px;
+      --space-4:32px;
+      --space-5:48px;
+      --space-6:64px;
+      --space-7:96px;
+      --space-8:120px;
+    }
+
+    html[data-theme="dark"]{
+      --bg:#080C16;
+      --card:#111827;
+      --card-soft:#162033;
+      --card-muted:#1B2740;
+      --text:#F9FAFB;
+      --muted:#AAB3C2;
+      --muted2:#7D899C;
+      --accent:#60A5FA;
+      --accent-soft:rgba(96,165,250,.15);
+      --border:rgba(255,255,255,.11);
+      --border2:rgba(255,255,255,.15);
+      --border-strong:rgba(255,255,255,.22);
+      --shadow-soft:0 1px 0 rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.36);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition:background-color .22s ease, color .22s ease;
+    }
+
+    button{font:inherit}
+
+    .page{
+      width:min(var(--container), calc(100% - 40px));
+      margin:0 auto;
+      padding:56px 0 104px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom:28px;
+    }
+
+    .theme-switch{
+      width:56px;
+      height:40px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:var(--card);
+      cursor:pointer;
+    }
+
+    .switch-track{
+      position:relative;
+      width:48px;
+      height:24px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:rgba(17,24,39,.06);
+    }
+
+    html[data-theme="dark"] .switch-track{
+      background:rgba(255,255,255,.10);
+    }
+
+    .switch-thumb{
+      position:absolute;
+      top:50%;
+      left:2px;
+      width:20px;
+      height:20px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:var(--bg);
+      transform:translate3d(0,-50%,0);
+      transition:transform .28s cubic-bezier(.2,.85,.2,1.15);
+    }
+
+    html[data-theme="dark"] .switch-thumb{
+      transform:translate3d(24px,-50%,0);
+    }
+
+    .hero-preview{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 280px;
+      gap:48px;
+      align-items:center;
+      margin-bottom:76px;
+      padding:42px;
+      border-radius:36px;
+      background:var(--card-soft);
+    }
+
+    .hero-preview p{
+      max-width:660px;
+      margin:0;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.58;
+    }
+
+    .hero-preview h1{
+      max-width:780px;
+      margin:0 0 22px;
+      color:var(--text);
+      font-size:clamp(42px, 5.6vw, 72px);
+      line-height:.96;
+      letter-spacing:-.055em;
+      font-weight:700;
+    }
+
+    .hero-preview__orb{
+      width:100%;
+      aspect-ratio:1;
+      border-radius:999px;
+      background:
+        radial-gradient(circle at 35% 28%, rgba(255,255,255,.74), transparent 22%),
+        var(--accent);
+    }
+
+    .variant{
+      margin-top:92px;
+    }
+
+    main > .variant,
+    main > .carousel-prototype:nth-of-type(n+6){
+      display:none;
+    }
+
+    .variant:first-of-type{
+      margin-top:0;
+    }
+
+    .variant-label{
+      margin:0 0 22px;
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .section-head{
+      max-width:760px;
+      margin-bottom:42px;
+    }
+
+    .section-head h2{
+      margin:0;
+      color:var(--text);
+      font-size:30px;
+      line-height:1.18;
+      letter-spacing:-.3px;
+      font-weight:700;
+    }
+
+    .section-head p{
+      max-width:720px;
+      margin:16px 0 0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+    }
+
+    .problem-title{
+      margin:0;
+      color:var(--text);
+      font-size:clamp(22px, 2.3vw, 30px);
+      line-height:1.12;
+      letter-spacing:-.04em;
+      font-weight:700;
+    }
+
+    .problem-text{
+      margin:18px 0 0;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.58;
+    }
+
+    /* 01 Editorial columns */
+    .editorial-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:54px;
+      padding:10px 0 8px;
+    }
+
+    .editorial-card{
+      min-width:0;
+    }
+
+    .editorial-kicker{
+      display:inline-grid;
+      place-items:center;
+      width:42px;
+      height:42px;
+      margin-bottom:28px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+      font-size:14px;
+      line-height:1;
+      font-weight:700;
+      letter-spacing:-.02em;
+    }
+
+    .editorial-card .problem-text{
+      max-width:250px;
+      font-size:15px;
+    }
+
+    /* 02 System panels */
+    .system-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:24px;
+    }
+
+    .system-card{
+      position:relative;
+      min-height:260px;
+      padding:34px;
+      border:1px solid var(--border);
+      border-radius:24px;
+      background:var(--card);
+      overflow:hidden;
+    }
+
+    .system-card::before{
+      content:"";
+      position:absolute;
+      left:34px;
+      right:34px;
+      top:0;
+      height:3px;
+      border-radius:0 0 999px 999px;
+      background:var(--accent);
+      opacity:.84;
+    }
+
+    .system-card__top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:24px;
+      margin-bottom:28px;
+    }
+
+    .system-index{
+      color:var(--accent);
+      font-size:13px;
+      line-height:1;
+      font-weight:700;
+      letter-spacing:.02em;
+    }
+
+    .system-card .problem-text{
+      max-width:560px;
+    }
+
+    /* 03 Signal flow */
+    .signal-shell{
+      padding:42px;
+      border-radius:32px;
+      background:var(--card-soft);
+    }
+
+    .signal-grid{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:34px;
+    }
+
+    .signal-grid::before{
+      content:"";
+      position:absolute;
+      top:34px;
+      left:34px;
+      right:34px;
+      height:1px;
+      background:linear-gradient(90deg, var(--accent), var(--border2) 28%, var(--border2));
+      opacity:.75;
+    }
+
+    .signal-card{
+      position:relative;
+      min-width:0;
+      padding-top:84px;
+    }
+
+    .signal-dot{
+      position:absolute;
+      top:0;
+      left:0;
+      z-index:1;
+      width:68px;
+      height:68px;
+      display:grid;
+      place-items:center;
+      border:1px solid var(--accent-soft);
+      border-radius:999px;
+      background:var(--bg);
+      color:var(--accent);
+      font-size:14px;
+      line-height:1;
+      font-weight:700;
+      letter-spacing:.02em;
+      box-shadow:0 0 0 12px var(--card-soft);
+    }
+
+    .signal-card:nth-child(1) .signal-dot{animation-delay:0s}
+    .signal-card:nth-child(2) .signal-dot{animation-delay:.6s}
+    .signal-card:nth-child(3) .signal-dot{animation-delay:1.2s}
+    .signal-card:nth-child(4) .signal-dot{animation-delay:1.8s}
+
+    .signal-dot{
+      animation:signalPulse 5.8s ease-in-out infinite;
+    }
+
+    .signal-card .problem-title{
+      font-size:clamp(21px, 2vw, 28px);
+    }
+
+    .signal-card .problem-text{
+      max-width:250px;
+      font-size:15px;
+    }
+
+    @keyframes signalPulse{
+      0%, 100%{
+        border-color:var(--accent-soft);
+        box-shadow:0 0 0 12px var(--card-soft);
+      }
+      38%{
+        border-color:color-mix(in srgb, var(--accent) 42%, transparent);
+        box-shadow:0 0 0 12px var(--card-soft), 0 0 0 20px color-mix(in srgb, var(--accent) 9%, transparent);
+      }
+    }
+
+    /* Carousel prototypes */
+    .carousel-prototype{
+      margin-top:var(--space-7);
+    }
+
+    .carousel-shell{
+      border-radius:calc(var(--radius) + 8px);
+      background:var(--card-soft);
+      overflow:hidden;
+    }
+
+    .carousel-button{
+      border:0;
+      color:inherit;
+      cursor:pointer;
+      font:inherit;
+    }
+
+    .focus-carousel{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 360px;
+      gap:var(--space-5);
+      padding:var(--space-5);
+    }
+
+    .focus-stage{
+      min-height:330px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:var(--space-5);
+      border-radius:calc(var(--radius) + 4px);
+      background:var(--card);
+    }
+
+    .focus-index{
+      display:none;
+    }
+
+    .focus-title{
+      max-width:720px;
+      margin:var(--space-5) 0 0;
+      color:var(--text);
+      font-size:clamp(34px, 4vw, 50px);
+      line-height:1.04;
+      letter-spacing:-.045em;
+      font-weight:500;
+    }
+
+    .focus-text{
+      max-width:680px;
+      margin:var(--space-3) 0 0;
+      color:var(--muted);
+      font-size:clamp(17px, 1.25vw, 20px);
+      line-height:1.6;
+    }
+
+    .focus-tabs{
+      display:grid;
+      gap:var(--space-2);
+      align-content:start;
+    }
+
+    .focus-tab{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:var(--space-2);
+      align-items:center;
+      padding:var(--space-2);
+      border:1px solid transparent;
+      border-radius:var(--radius-sm);
+      background:transparent;
+      text-align:left;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.35;
+    }
+
+    .focus-tab span{
+      display:none;
+    }
+
+    .focus-tab.is-active{
+      border-color:var(--border);
+      background:var(--card);
+      color:var(--text);
+    }
+
+    .mobile-carousel-preview{
+      display:grid;
+      grid-template-columns:360px minmax(0, 1fr);
+      gap:var(--space-5);
+      align-items:center;
+      margin-top:var(--space-4);
+      padding:var(--space-4);
+      border:1px solid var(--border);
+      border-radius:calc(var(--radius) + 8px);
+      background:var(--card);
+    }
+
+    .phone-frame{
+      width:100%;
+      max-width:360px;
+      min-height:640px;
+      padding:var(--space-2);
+      border:1px solid var(--border2);
+      border-radius:calc(var(--radius) + 10px);
+      background:var(--bg);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .phone-screen{
+      min-height:604px;
+      padding:var(--space-3) var(--space-2);
+      border-radius:var(--radius);
+      background:var(--card-soft);
+    }
+
+    .phone-section-title{
+      margin:0 0 var(--space-3);
+      color:var(--text);
+      font-size:24px;
+      line-height:1.12;
+      letter-spacing:-.03em;
+      font-weight:700;
+    }
+
+    .phone-active-card{
+      min-height:272px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:var(--space-3);
+      border-radius:var(--radius);
+      background:var(--card);
+    }
+
+    .phone-active-card__index{
+      display:none;
+    }
+
+    .phone-active-card h3{
+      margin:34px 0 0;
+      color:var(--text);
+      font-size:32px;
+      line-height:1.04;
+      letter-spacing:-.045em;
+      font-weight:600;
+    }
+
+    .phone-active-card p{
+      margin:22px 0 0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+    }
+
+    .phone-tabs{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:var(--space-1);
+      margin-top:var(--space-2);
+    }
+
+    .phone-tab{
+      min-height:70px;
+      padding:12px;
+      border:1px solid transparent;
+      border-radius:var(--radius-xs);
+      background:var(--card);
+      color:var(--muted);
+      text-align:left;
+    }
+
+    .phone-tab span{
+      display:none;
+    }
+
+    .phone-tab.is-active{
+      border-color:color-mix(in srgb, var(--accent) 28%, var(--border));
+      color:var(--text);
+    }
+
+    .mobile-notes h3{
+      margin:0;
+      color:var(--text);
+      font-size:30px;
+      line-height:1.18;
+      letter-spacing:-.3px;
+      font-weight:700;
+    }
+
+    .mobile-notes p{
+      max-width:540px;
+      margin:18px 0 0;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.58;
+    }
+
+    .mobile-notes ul{
+      display:grid;
+      gap:12px;
+      max-width:560px;
+      margin:28px 0 0;
+      padding:0;
+      list-style:none;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.5;
+    }
+
+    .mobile-notes li::before{
+      content:"";
+      display:inline-block;
+      width:8px;
+      height:8px;
+      margin-right:10px;
+      border-radius:999px;
+      background:var(--accent);
+    }
+
+    .icon-carousel-example{
+      margin-top:var(--space-7);
+    }
+
+    .icon-focus-carousel{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 380px;
+      gap:var(--space-5);
+      padding:var(--space-5);
+      border-radius:calc(var(--radius) + 8px);
+      background:var(--card-soft);
+    }
+
+    .icon-focus-stage{
+      min-height:360px;
+      display:grid;
+      grid-template-columns:92px minmax(0, 1fr);
+      gap:var(--space-4);
+      align-items:start;
+      padding:var(--space-5);
+      border-radius:calc(var(--radius) + 4px);
+      background:var(--card);
+    }
+
+    .problem-icon{
+      width:72px;
+      height:72px;
+      display:grid;
+      place-items:center;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+    }
+
+    .problem-icon svg{
+      width:32px;
+      height:32px;
+      stroke:currentColor;
+      stroke-width:1.8;
+      fill:none;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .icon-focus-title{
+      max-width:680px;
+      margin:0;
+      color:var(--text);
+      font-size:clamp(34px, 4vw, 50px);
+      line-height:1.04;
+      letter-spacing:-.045em;
+      font-weight:600;
+    }
+
+    .icon-focus-text{
+      max-width:680px;
+      margin:var(--space-3) 0 0;
+      color:var(--muted);
+      font-size:clamp(17px, 1.25vw, 20px);
+      line-height:1.6;
+    }
+
+    .icon-tabs{
+      display:grid;
+      gap:var(--space-2);
+      align-content:start;
+    }
+
+    .icon-tab{
+      display:grid;
+      grid-template-columns:44px 1fr;
+      gap:var(--space-2);
+      align-items:center;
+      padding:var(--space-2);
+      border:1px solid transparent;
+      border-radius:var(--radius-sm);
+      background:transparent;
+      color:var(--muted);
+      text-align:left;
+      font-size:15px;
+      line-height:1.35;
+    }
+
+    .icon-tab .problem-icon{
+      width:44px;
+      height:44px;
+      background:transparent;
+    }
+
+    .icon-tab .problem-icon svg{
+      width:21px;
+      height:21px;
+    }
+
+    .icon-tab.is-active{
+      border-color:var(--border);
+      background:var(--card);
+      color:var(--text);
+    }
+
+    .icon-phone-preview{
+      margin-top:var(--space-4);
+    }
+
+    .icon-phone-preview .phone-active-card{
+      min-height:316px;
+    }
+
+    .phone-icon-head{
+      display:grid;
+      grid-template-columns:56px 1fr;
+      gap:var(--space-2);
+      align-items:start;
+    }
+
+    .phone-icon-head .problem-icon{
+      width:56px;
+      height:56px;
+    }
+
+    .phone-icon-head .problem-icon svg{
+      width:26px;
+      height:26px;
+    }
+
+    .phone-icon-head h3{
+      margin:0;
+    }
+
+    .icon-phone-preview .phone-tab{
+      display:grid;
+      grid-template-columns:32px 1fr;
+      gap:10px;
+      align-items:center;
+    }
+
+    .icon-phone-preview .phone-tab .problem-icon{
+      width:32px;
+      height:32px;
+      border:0;
+      background:transparent;
+    }
+
+    .icon-phone-preview .phone-tab .problem-icon svg{
+      width:18px;
+      height:18px;
+    }
+
+    .carousel-prototype > .section-head,
+    .carousel-prototype > .focus-carousel,
+    .carousel-prototype > .mobile-carousel-preview,
+    .icon-carousel-example{
+      display:none;
+    }
+
+    .state-variants{
+      margin-top:0;
+      display:block;
+    }
+
+    .state-variant .focus-carousel{
+      margin-top:var(--space-4);
+    }
+
+    .state-variant{
+      display:none;
+    }
+
+    .state-variant--strong{
+      display:block;
+    }
+
+    .focus-carousel--strong-tab .focus-tab.is-active{
+      border-color:color-mix(in srgb, var(--accent) 34%, var(--border));
+      background:var(--card);
+      box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .focus-carousel--strong-tab .focus-tab.is-active strong{
+      color:var(--text);
+    }
+
+    .strong-phone-preview{
+      display:grid;
+      margin-top:var(--space-4);
+    }
+
+    .strong-phone-preview .phone-tab.is-active{
+      border-color:color-mix(in srgb, var(--accent) 34%, var(--border));
+      background:var(--card);
+      color:var(--text);
+      box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .focus-carousel--color-title .focus-title{
+      animation:titleSoftAccent 3.8s ease-in-out infinite;
+    }
+
+    .focus-carousel--marker .focus-tab{
+      position:relative;
+      padding-left:calc(var(--space-2) + 14px);
+    }
+
+    .focus-carousel--marker .focus-tab::before{
+      content:"";
+      position:absolute;
+      left:var(--space-2);
+      top:50%;
+      width:6px;
+      height:6px;
+      border-radius:999px;
+      background:var(--border-strong);
+      transform:translateY(-50%);
+      transition:background-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .focus-carousel--marker .focus-tab.is-active::before{
+      background:var(--accent);
+      box-shadow:0 0 0 6px var(--accent-soft);
+      transform:translateY(-50%) scale(1.08);
+    }
+
+    @keyframes titleSoftAccent{
+      0%, 100%{
+        color:var(--text);
+      }
+      42%{
+        color:var(--accent);
+      }
+      68%{
+        color:var(--text);
+      }
+    }
+
+    .belt-carousel{
+      padding:42px;
+      background:var(--card);
+    }
+
+    .belt-track{
+      display:grid;
+      grid-template-columns:1.35fr repeat(3, .72fr);
+      gap:16px;
+      transition:grid-template-columns .35s ease;
+    }
+
+    .belt-card{
+      min-height:300px;
+      padding:28px;
+      border:1px solid var(--border);
+      border-radius:24px;
+      background:var(--card-soft);
+      text-align:left;
+      overflow:hidden;
+      opacity:.68;
+      transition:opacity .25s ease, background-color .25s ease, border-color .25s ease;
+    }
+
+    .belt-card.is-active{
+      opacity:1;
+      border-color:color-mix(in srgb, var(--accent) 28%, var(--border));
+      background:var(--card);
+    }
+
+    .belt-card__index{
+      display:block;
+      margin-bottom:68px;
+      color:var(--accent);
+      font-size:13px;
+      line-height:1;
+      font-weight:700;
+    }
+
+    .belt-card h3{
+      margin:0;
+      color:var(--text);
+      font-size:clamp(24px, 2.4vw, 36px);
+      line-height:1;
+      letter-spacing:-.05em;
+      font-weight:700;
+    }
+
+    .belt-card p{
+      max-width:520px;
+      margin:18px 0 0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.55;
+    }
+
+    .belt-card:not(.is-active) p{
+      display:none;
+    }
+
+    .scenario-carousel{
+      padding:42px;
+    }
+
+    .scenario-nav{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+      margin-bottom:24px;
+    }
+
+    .scenario-step{
+      padding:18px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:var(--card);
+      text-align:left;
+      color:var(--muted);
+    }
+
+    .scenario-step span{
+      display:block;
+      margin-bottom:18px;
+      color:var(--accent);
+      font-size:13px;
+      line-height:1;
+      font-weight:700;
+    }
+
+    .scenario-step.is-active{
+      border-color:color-mix(in srgb, var(--accent) 32%, var(--border));
+      color:var(--text);
+    }
+
+    .scenario-panel{
+      display:grid;
+      grid-template-columns:minmax(0, .92fr) minmax(0, 1.08fr);
+      gap:40px;
+      align-items:end;
+      min-height:340px;
+      padding:42px;
+      border-radius:28px;
+      background:var(--card);
+    }
+
+    .scenario-panel h3{
+      margin:0;
+      color:var(--text);
+      font-size:clamp(42px, 5vw, 72px);
+      line-height:.94;
+      letter-spacing:-.06em;
+      font-weight:700;
+    }
+
+    .scenario-panel p{
+      max-width:620px;
+      margin:0;
+      color:var(--muted);
+      font-size:clamp(18px, 1.5vw, 22px);
+      line-height:1.58;
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .signal-dot{animation:none}
+      .focus-carousel--color-title .focus-title{animation:none}
+    }
+
+    @media (max-width:980px){
+      .hero-preview{
+        grid-template-columns:1fr;
+      }
+
+      .hero-preview__orb{
+        display:none;
+      }
+
+      .editorial-grid,
+      .signal-grid{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+      }
+
+      .focus-carousel,
+      .mobile-carousel-preview,
+      .icon-focus-carousel,
+      .scenario-panel{
+        grid-template-columns:1fr;
+      }
+
+      .belt-track{
+        grid-template-columns:1fr;
+      }
+
+      .belt-card:not(.is-active) p{
+        display:block;
+      }
+
+      .scenario-nav{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+      }
+
+      .signal-grid::before{
+        display:none;
+      }
+    }
+
+    @media (max-width:760px){
+      .page{
+        width:min(100% - 28px, var(--container));
+        padding:32px 0 72px;
+      }
+
+      .hero-preview{
+        margin-bottom:56px;
+        padding:30px 22px;
+        border-radius:28px;
+      }
+
+      .editorial-grid,
+      .system-grid,
+      .signal-grid,
+      .scenario-nav{
+        grid-template-columns:1fr;
+      }
+
+      .variant{
+        margin-top:72px;
+      }
+
+      .system-card{
+        min-height:auto;
+        padding:28px;
+      }
+
+      .signal-shell{
+        padding:28px;
+        border-radius:24px;
+      }
+
+      .focus-carousel,
+      .belt-carousel,
+      .scenario-carousel{
+        padding:24px;
+        border-radius:24px;
+      }
+
+      .focus-stage,
+      .scenario-panel{
+        min-height:auto;
+        padding:28px;
+        border-radius:22px;
+      }
+
+      .focus-tabs{
+        grid-template-columns:1fr;
+      }
+
+      .icon-focus-stage{
+        min-height:auto;
+        grid-template-columns:1fr;
+        padding:28px;
+        border-radius:22px;
+      }
+
+      .phone-frame{
+        max-width:none;
+        min-height:auto;
+      }
+
+      .phone-screen{
+        min-height:auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <button class="theme-switch" type="button" aria-label="Переключить тему" aria-pressed="false">
+        <span class="switch-track" aria-hidden="true">
+          <span class="switch-thumb"></span>
+        </span>
+      </button>
+    </div>
+
+    <section class="hero-preview">
+      <div>
+        <h1>Утвержденная карусель для главной</h1>
+        <p>Один крупный активный тезис, понятная навигация по проблемам и отдельная мобильная логика в формате табов.</p>
+      </div>
+      <div class="hero-preview__orb" aria-hidden="true"></div>
+    </section>
+
+    <section class="variant">
+      <p class="variant-label">Вариант 01 / editorial impact</p>
+      <div class="section-head">
+        <h2>Какие проблемы бизнеса я решаю</h2>
+        <p>Через интерфейсы, архитектуру и системный подход помогаю снижать риски, удерживать консистентность и делать сложные продукты понятнее для команды и пользователей.</p>
+      </div>
+      <div class="editorial-grid">
+        <article class="editorial-card">
+          <div class="editorial-kicker">01</div>
+          <h3 class="problem-title">Ошибки и риски</h3>
+          <p class="problem-text">Снижаю вероятность критичных ошибок в регламентных и операционных сценариях.</p>
+        </article>
+        <article class="editorial-card">
+          <div class="editorial-kicker">02</div>
+          <h3 class="problem-title">Стоимость изменений</h3>
+          <p class="problem-text">Помогаю продуктам расти без визуального и логического хаоса.</p>
+        </article>
+        <article class="editorial-card">
+          <div class="editorial-kicker">03</div>
+          <h3 class="problem-title">Скорость решений</h3>
+          <p class="problem-text">Убираю лишнюю неопределенность в требованиях, сценариях и состояниях.</p>
+        </article>
+        <article class="editorial-card">
+          <div class="editorial-kicker">04</div>
+          <h3 class="problem-title">Сложные данные</h3>
+          <p class="problem-text">Превращаю перегруженные интерфейсы в понятные рабочие инструменты.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant">
+      <p class="variant-label">Вариант 02 / system panels</p>
+      <div class="section-head">
+        <h2>Какие проблемы бизнеса я решаю</h2>
+        <p>Фокус не на “красивых экранах”, а на устойчивых решениях: сценарии, состояния, правила, компоненты и понятная передача в разработку.</p>
+      </div>
+      <div class="system-grid">
+        <article class="system-card">
+          <div class="system-card__top">
+            <h3 class="problem-title">Ошибки и риски</h3>
+            <span class="system-index">01</span>
+          </div>
+          <p class="problem-text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+        </article>
+        <article class="system-card">
+          <div class="system-card__top">
+            <h3 class="problem-title">Консистентность и стоимость изменений</h3>
+            <span class="system-index">02</span>
+          </div>
+          <p class="problem-text">Помогаю продуктам расти через дизайн-системы, единые паттерны и управляемые правила изменений.</p>
+        </article>
+        <article class="system-card">
+          <div class="system-card__top">
+            <h3 class="problem-title">Скорость согласований и реализации</h3>
+            <span class="system-index">03</span>
+          </div>
+          <p class="problem-text">Убираю лишнюю неопределенность, чтобы команда быстрее принимала решения и стабильнее доводила их до релиза.</p>
+        </article>
+        <article class="system-card">
+          <div class="system-card__top">
+            <h3 class="problem-title">Понятность интерфейсов с данными</h3>
+            <span class="system-index">04</span>
+          </div>
+          <p class="problem-text">Превращаю сложные аналитические и операционные интерфейсы в инструменты, где главное считывается быстро.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant">
+      <p class="variant-label">Вариант 03 / signal flow</p>
+      <div class="signal-shell">
+        <div class="section-head">
+          <h2>Какие проблемы бизнеса я решаю</h2>
+          <p>Показываем блок как систему связанных эффектов: меньше рисков, меньше хаоса, быстрее команда, понятнее продукт.</p>
+        </div>
+        <div class="signal-grid">
+          <article class="signal-card">
+            <div class="signal-dot">01</div>
+            <h3 class="problem-title">Меньше рисков</h3>
+            <p class="problem-text">Сценарии, статусы и ошибки становятся понятными до разработки.</p>
+          </article>
+          <article class="signal-card">
+            <div class="signal-dot">02</div>
+            <h3 class="problem-title">Меньше хаоса</h3>
+            <p class="problem-text">Компоненты, паттерны и правила удерживают продукт в системе.</p>
+          </article>
+          <article class="signal-card">
+            <div class="signal-dot">03</div>
+            <h3 class="problem-title">Быстрее команда</h3>
+            <p class="problem-text">Требования и решения становятся прозрачнее для продукта и разработки.</p>
+          </article>
+          <article class="signal-card">
+            <div class="signal-dot">04</div>
+            <h3 class="problem-title">Понятнее данные</h3>
+            <p class="problem-text">Сложные таблицы, графики и роли превращаются в рабочие сценарии.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="carousel-prototype">
+      <p class="variant-label">Карусель 01 / focus slide</p>
+      <div class="section-head">
+        <h2>Какие проблемы бизнеса я решаю</h2>
+        <p>Один крупный активный тезис и компактная навигация по четырем проблемам. Самый спокойный и премиальный вариант.</p>
+      </div>
+      <div class="carousel-shell focus-carousel" data-carousel="focus">
+        <div class="focus-stage">
+          <div>
+            <div class="focus-index" data-role="index">01</div>
+            <h3 class="focus-title" data-role="title">Ошибки и риски</h3>
+          </div>
+          <p class="focus-text" data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+        </div>
+        <div class="focus-tabs" data-role="nav"></div>
+      </div>
+
+      <div class="mobile-carousel-preview" data-carousel="phone">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <h3 class="phone-section-title">Какие проблемы бизнеса я решаю</h3>
+            <div class="phone-active-card">
+              <div>
+                <div class="phone-active-card__index" data-role="index">01</div>
+                <h3 data-role="title">Ошибки и риски</h3>
+              </div>
+              <p data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+            </div>
+            <div class="phone-tabs" data-role="nav"></div>
+          </div>
+        </div>
+        <div class="mobile-notes">
+          <h3>Мобильная логика: не слайдер, а табы</h3>
+          <p>На телефоне карусель 01 лучше работает как один раскрытый тезис и четыре понятных переключателя. Так пользователь видит весь выбор и не теряет контент.</p>
+          <ul>
+            <li>Без автопрокрутки: переключение только по тапу.</li>
+            <li>Активный блок сверху, табы сразу под ним.</li>
+            <li>Стабильная высота, чтобы страница не прыгала.</li>
+            <li>Два столбца табов помещаются без горизонтального скролла.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="icon-carousel-example">
+        <p class="variant-label">Пример / карусель с иконками</p>
+        <div class="section-head">
+          <h2>Какие проблемы бизнеса я решаю</h2>
+          <p>Та же карусель, но с дополнительным визуальным якорем: иконка помогает быстрее считать смысл активной проблемы.</p>
+        </div>
+        <div class="icon-focus-carousel" data-carousel="icon-focus">
+          <div class="icon-focus-stage">
+            <div class="problem-icon" data-role="icon" aria-hidden="true"></div>
+            <div>
+              <h3 class="icon-focus-title" data-role="title">Ошибки и риски</h3>
+              <p class="icon-focus-text" data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+            </div>
+          </div>
+          <div class="icon-tabs" data-role="nav"></div>
+        </div>
+
+        <div class="mobile-carousel-preview icon-phone-preview" data-carousel="icon-phone">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <h3 class="phone-section-title">Какие проблемы бизнеса я решаю</h3>
+              <div class="phone-active-card">
+                <div class="phone-icon-head">
+                  <div class="problem-icon" data-role="icon" aria-hidden="true"></div>
+                  <h3 data-role="title">Ошибки и риски</h3>
+                </div>
+                <p data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+              </div>
+              <div class="phone-tabs" data-role="nav"></div>
+            </div>
+          </div>
+          <div class="mobile-notes">
+            <h3>Мобильная версия с иконками</h3>
+            <p>Иконки остаются как быстрый визуальный маркер, но не занимают отдельный ряд. Активный тезис получает крупную иконку, а табы — компактные иконки рядом с названием.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-variants">
+        <section class="state-variant state-variant--strong">
+          <p class="variant-label">Состояние 01 / активный таб</p>
+          <div class="section-head">
+            <h2>Какие проблемы бизнеса я решаю</h2>
+            <p>Самый понятный вариант: активный пункт в навигации получает более выраженный фон и мягкий акцентный бордер.</p>
+          </div>
+          <div class="carousel-shell focus-carousel focus-carousel--strong-tab" data-carousel="strong-tab">
+            <div class="focus-stage">
+              <div>
+                <div class="focus-index" data-role="index">01</div>
+                <h3 class="focus-title" data-role="title">Ошибки и риски</h3>
+              </div>
+              <p class="focus-text" data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+            </div>
+            <div class="focus-tabs" data-role="nav"></div>
+          </div>
+
+          <div class="mobile-carousel-preview strong-phone-preview" data-carousel="strong-phone">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <h3 class="phone-section-title">Какие проблемы бизнеса я решаю</h3>
+                <div class="phone-active-card">
+                  <div>
+                    <div class="phone-active-card__index" data-role="index">01</div>
+                    <h3 data-role="title">Ошибки и риски</h3>
+                  </div>
+                  <p data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+                </div>
+                <div class="phone-tabs" data-role="nav"></div>
+              </div>
+            </div>
+            <div class="mobile-notes">
+              <h3>Мобильная версия активного таба</h3>
+              <p>На телефоне оставляем тот же принцип: активный тезис сверху, ниже табы 2×2 с более заметным активным состоянием.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="state-variant state-variant--color">
+          <p class="variant-label">Состояние 02 / мягкая смена цвета заголовка</p>
+          <div class="section-head">
+            <h2>Какие проблемы бизнеса я решаю</h2>
+            <p>Активный заголовок получает мягкий цветовой сигнал: акцент появляется и возвращается в основной цвет текста.</p>
+          </div>
+          <div class="carousel-shell focus-carousel focus-carousel--color-title" data-carousel="color-title">
+            <div class="focus-stage">
+              <div>
+                <div class="focus-index" data-role="index">01</div>
+                <h3 class="focus-title" data-role="title">Ошибки и риски</h3>
+              </div>
+              <p class="focus-text" data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+            </div>
+            <div class="focus-tabs" data-role="nav"></div>
+          </div>
+        </section>
+
+        <section class="state-variant state-variant--marker">
+          <p class="variant-label">Состояние 03 / маленький маркер</p>
+          <div class="section-head">
+            <h2>Какие проблемы бизнеса я решаю</h2>
+            <p>Самый минимальный визуальный якорь: активный таб отмечается маленькой акцентной точкой без дополнительных иконок.</p>
+          </div>
+          <div class="carousel-shell focus-carousel focus-carousel--marker" data-carousel="marker">
+            <div class="focus-stage">
+              <div>
+                <div class="focus-index" data-role="index">01</div>
+                <h3 class="focus-title" data-role="title">Ошибки и риски</h3>
+              </div>
+              <p class="focus-text" data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+            </div>
+            <div class="focus-tabs" data-role="nav"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="carousel-prototype">
+      <p class="variant-label">Карусель 02 / horizontal belt</p>
+      <div class="section-head">
+        <h2>Какие проблемы бизнеса я решаю</h2>
+        <p>Широкая горизонтальная лента: активный блок раскрыт, остальные остаются как приглушенные направления.</p>
+      </div>
+      <div class="belt-carousel" data-carousel="belt">
+        <div class="belt-track" data-role="nav"></div>
+      </div>
+    </section>
+
+    <section class="carousel-prototype">
+      <p class="variant-label">Карусель 03 / scenario steps</p>
+      <div class="section-head">
+        <h2>Какие проблемы бизнеса я решаю</h2>
+        <p>Сценарная подача: проблемы выглядят как связанные эффекты, а активный пункт раскрывает ценность подробнее.</p>
+      </div>
+      <div class="carousel-shell scenario-carousel" data-carousel="scenario">
+        <div class="scenario-nav" data-role="nav"></div>
+        <div class="scenario-panel">
+          <h3 data-role="title">Ошибки и риски</h3>
+          <p data-role="text">Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const button = document.querySelector(".theme-switch");
+      const saved = localStorage.getItem("business-problems-theme");
+      const initial = saved || document.documentElement.getAttribute("data-theme") || "light";
+
+      function setTheme(theme){
+        root.setAttribute("data-theme", theme);
+        button.setAttribute("aria-pressed", String(theme === "dark"));
+        localStorage.setItem("business-problems-theme", theme);
+      }
+
+      setTheme(initial);
+      button.addEventListener("click", function(){
+        setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
+
+      const problems = [
+        {
+          index:"01",
+          title:"Ошибки и риски",
+          short:"Риски",
+          text:"Снижаю вероятность критичных ошибок за счет валидаций, статусов, подтверждений и прозрачных правил взаимодействия."
+        },
+        {
+          index:"02",
+          title:"Консистентность и стоимость изменений",
+          short:"Консистентность",
+          text:"Помогаю продуктам расти через дизайн-системы, единые паттерны и управляемые правила изменений."
+        },
+        {
+          index:"03",
+          title:"Скорость согласований и реализации",
+          short:"Скорость",
+          text:"Убираю лишнюю неопределенность, чтобы команда быстрее принимала решения и стабильнее доводила их до релиза."
+        },
+        {
+          index:"04",
+          title:"Понятность интерфейсов с данными",
+          short:"Данные",
+          text:"Превращаю сложные аналитические и операционные интерфейсы в инструменты, где главное считывается быстро."
+        }
+      ];
+
+      const problemIcons = [
+        '<svg viewBox="0 0 24 24" data-icon="lucide-triangle-alert"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
+        '<svg viewBox="0 0 24 24" data-icon="lucide-layers"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"></path><path d="m22 12.5-9.17 4.17a2 2 0 0 1-1.66 0L2 12.5"></path><path d="m22 17.5-9.17 4.17a2 2 0 0 1-1.66 0L2 17.5"></path></svg>',
+        '<svg viewBox="0 0 24 24" data-icon="lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
+        '<svg viewBox="0 0 24 24" data-icon="lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>'
+      ];
+
+      function setActive(rootNode, activeIndex){
+        rootNode.dataset.active = String(activeIndex);
+        rootNode.querySelectorAll("[data-role='index']").forEach((node) => {
+          node.textContent = problems[activeIndex].index;
+        });
+        rootNode.querySelectorAll("[data-role='title']").forEach((node) => {
+          node.textContent = problems[activeIndex].title;
+        });
+        rootNode.querySelectorAll("[data-role='text']").forEach((node) => {
+          node.textContent = problems[activeIndex].text;
+        });
+        rootNode.querySelectorAll("[data-role='icon']").forEach((node) => {
+          node.innerHTML = problemIcons[activeIndex];
+        });
+        rootNode.querySelectorAll("[data-index]").forEach((buttonNode) => {
+          const isActive = Number(buttonNode.dataset.index) === activeIndex;
+          buttonNode.classList.toggle("is-active", isActive);
+          buttonNode.setAttribute("aria-pressed", String(isActive));
+        });
+        const beltTrack = rootNode.querySelector(".belt-track");
+        if(beltTrack){
+          beltTrack.style.gridTemplateColumns = problems.map((_, index) => index === activeIndex ? "1.35fr" : ".72fr").join(" ");
+        }
+      }
+
+      document.querySelectorAll("[data-carousel='focus']").forEach((carousel) => {
+        const nav = carousel.querySelector("[data-role='nav']");
+        problems.forEach((item, index) => {
+          const tab = document.createElement("button");
+          tab.type = "button";
+          tab.className = "carousel-button focus-tab";
+          tab.dataset.index = String(index);
+          tab.innerHTML = "<span>" + item.index + "</span><strong>" + item.short + "</strong>";
+          tab.addEventListener("click", () => setActive(carousel, index));
+          nav.appendChild(tab);
+        });
+        setActive(carousel, 0);
+      });
+
+      document.querySelectorAll("[data-carousel='strong-tab'], [data-carousel='color-title'], [data-carousel='marker']").forEach((carousel) => {
+        const nav = carousel.querySelector("[data-role='nav']");
+        problems.forEach((item, index) => {
+          const tab = document.createElement("button");
+          tab.type = "button";
+          tab.className = "carousel-button focus-tab";
+          tab.dataset.index = String(index);
+          tab.innerHTML = "<span>" + item.index + "</span><strong>" + item.short + "</strong>";
+          tab.addEventListener("click", () => setActive(carousel, index));
+          nav.appendChild(tab);
+        });
+        setActive(carousel, 0);
+      });
+
+      document.querySelectorAll("[data-carousel='phone']").forEach((carousel) => {
+        const nav = carousel.querySelector("[data-role='nav']");
+        problems.forEach((item, index) => {
+          const tab = document.createElement("button");
+          tab.type = "button";
+          tab.className = "carousel-button phone-tab";
+          tab.dataset.index = String(index);
+          tab.innerHTML = "<span>" + item.index + "</span>" + item.short;
+          tab.addEventListener("click", () => setActive(carousel, index));
+          nav.appendChild(tab);
+        });
+        setActive(carousel, 0);
+      });
+
+      document.querySelectorAll("[data-carousel='strong-phone']").forEach((carousel) => {
+        const nav = carousel.querySelector("[data-role='nav']");
+        problems.forEach((item, index) => {
+          const tab = document.createElement("button");
+          tab.type = "button";
+          tab.className = "carousel-button phone-tab";
+          tab.dataset.index = String(index);
+          tab.textContent = item.short;
+          tab.addEventListener("click", () => setActive(carousel, index));
+          nav.appendChild(tab);
+        });
+        setActive(carousel, 0);
+      });
+
+      document.querySelectorAll("[data-carousel='icon-focus']").forEach((carousel) => {
+        const nav = carousel.querySelector("[data-role='nav']");
+        problems.forEach((item, index) => {
+          const tab = document.createElement("button");
+          tab.type = "button";
+          tab.className = "carousel-button icon-tab";
+          tab.dataset.index = String(index);
+          tab.innerHTML = "<span class='problem-icon' aria-hidden='true'>" + problemIcons[index] + "</span><strong>" + item.short + "</strong>";
+          tab.addEventListener("click", () => setActive(carousel, index));
+          nav.appendChild(tab);
+        });
+        setActive(carousel, 0);
+      });
+
+      document.querySelectorAll("[data-carousel='icon-phone']").forEach((carousel) => {
+        const nav = carousel.querySelector("[data-role='nav']");
+        problems.forEach((item, index) => {
+          const tab = document.createElement("button");
+          tab.type = "button";
+          tab.className = "carousel-button phone-tab";
+          tab.dataset.index = String(index);
+          tab.innerHTML = "<span class='problem-icon' aria-hidden='true'>" + problemIcons[index] + "</span>" + item.short;
+          tab.addEventListener("click", () => setActive(carousel, index));
+          nav.appendChild(tab);
+        });
+        setActive(carousel, 0);
+      });
+
+      document.querySelectorAll("[data-carousel='belt']").forEach((carousel) => {
+        const nav = carousel.querySelector("[data-role='nav']");
+        problems.forEach((item, index) => {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "carousel-button belt-card";
+          card.dataset.index = String(index);
+          card.innerHTML = "<span class='belt-card__index'>" + item.index + "</span><h3>" + item.short + "</h3><p>" + item.text + "</p>";
+          card.addEventListener("click", () => setActive(carousel, index));
+          nav.appendChild(card);
+        });
+        setActive(carousel, 0);
+      });
+
+      document.querySelectorAll("[data-carousel='scenario']").forEach((carousel) => {
+        const nav = carousel.querySelector("[data-role='nav']");
+        problems.forEach((item, index) => {
+          const step = document.createElement("button");
+          step.type = "button";
+          step.className = "carousel-button scenario-step";
+          step.dataset.index = String(index);
+          step.innerHTML = "<span>" + item.index + "</span>" + item.short;
+          step.addEventListener("click", () => setActive(carousel, index));
+          nav.appendChild(step);
+        });
+        setActive(carousel, 0);
+      });
+    })();
+  </script>
+</body>
+</html>
