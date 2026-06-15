@@ -2401,7 +2401,7 @@ html[data-theme="dark"] .logo-item img{
   background:transparent;
   color:var(--muted);
   font:inherit;
-  font-size:15px;
+  font-size:16px;
   line-height:1.35;
   text-align:left;
   cursor:pointer;
