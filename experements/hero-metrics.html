@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Прототип метрик под Hero</title>
+  <style>
+    :root{
+      --bg:#FFFFFF;
+      --card:#FFFFFF;
+      --card-soft:#F8FAFF;
+      --card-muted:#E9EEF8;
+      --text:#111827;
+      --muted:#4B5563;
+      --muted2:#6B7280;
+      --accent:#2563EB;
+      --accent-soft:rgba(37,99,235,.12);
+      --border:rgba(17,24,39,.10);
+      --border2:rgba(17,24,39,.14);
+      --border-strong:rgba(17,24,39,.18);
+      --case-a:#EEF2FF;
+      --case-b:#EAF1FF;
+      --case-c:#EEF8FF;
+      --case-dark:#0A1020;
+    }
+
+    html[data-theme="dark"]{
+      --bg:#080C16;
+      --card:#111827;
+      --card-soft:#162033;
+      --card-muted:#1B2740;
+      --text:#F9FAFB;
+      --muted:#AAB3C2;
+      --muted2:#7D899C;
+      --accent:#60A5FA;
+      --accent-soft:rgba(96,165,250,.15);
+      --border:rgba(255,255,255,.11);
+      --border2:rgba(255,255,255,.15);
+      --border-strong:rgba(255,255,255,.22);
+      --case-a:#18213A;
+      --case-b:#14213D;
+      --case-c:#11283A;
+      --case-dark:#070B14;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition:background-color .22s ease, color .22s ease;
+    }
+
+    button{font:inherit}
+
+    .page{
+      width:min(1200px, calc(100% - 40px));
+      margin:0 auto;
+      padding:56px 0 96px;
+    }
+
+    .prototype-header{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) auto;
+      gap:24px;
+      align-items:end;
+      margin-bottom:28px;
+    }
+
+    .prototype-header > div{
+      display:none;
+    }
+
+    .prototype-header{
+      justify-content:end;
+    }
+
+    .prototype-header h1{
+      max-width:900px;
+      margin:0;
+      font-family:ui-serif, Georgia, Cambria, "Times New Roman", serif;
+      font-size:clamp(40px, 6vw, 76px);
+      line-height:.95;
+      letter-spacing:-.04em;
+      font-weight:500;
+    }
+
+    .prototype-header p{
+      max-width:720px;
+      margin:14px 0 0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.55;
+    }
+
+    .theme-switch{
+      width:56px;
+      height:40px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:var(--card);
+      cursor:pointer;
+    }
+
+    .switch-track{
+      position:relative;
+      width:48px;
+      height:24px;
+      border:1px solid rgba(17,24,39,.10);
+      border-radius:999px;
+      background:rgba(17,24,39,.06);
+    }
+
+    html[data-theme="dark"] .switch-track{
+      border-color:rgba(255,255,255,.16);
+      background:rgba(255,255,255,.10);
+    }
+
+    .switch-thumb{
+      position:absolute;
+      top:50%;
+      left:2px;
+      width:20px;
+      height:20px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:var(--bg);
+      transform:translate3d(0,-50%,0);
+      transition:transform .28s cubic-bezier(.2,.85,.2,1.15);
+    }
+
+    html[data-theme="dark"] .switch-thumb{
+      transform:translate3d(24px,-50%,0);
+    }
+
+    .hero-preview{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 260px;
+      gap:36px;
+      align-items:center;
+      padding:42px;
+      border-radius:36px;
+      background:var(--card-soft);
+    }
+
+    .hero-preview__eyebrow,
+    .hero-preview__scope{
+      margin:0;
+      color:var(--muted);
+      font-family:ui-serif, Georgia, Cambria, "Times New Roman", serif;
+      font-size:clamp(24px, 3vw, 36px);
+      line-height:1.08;
+      letter-spacing:-.03em;
+    }
+
+    .hero-preview h2{
+      margin:6px 0;
+      color:var(--text);
+      font-family:ui-serif, Georgia, Cambria, "Times New Roman", serif;
+      font-size:clamp(44px, 7vw, 92px);
+      line-height:.9;
+      letter-spacing:-.055em;
+      font-weight:500;
+    }
+
+    .hero-preview__text{
+      max-width:660px;
+      margin:22px 0 0;
+      color:var(--muted);
+      font-size:clamp(17px, 1.25vw, 20px);
+      line-height:1.6;
+    }
+
+    .hero-preview__orb{
+      width:100%;
+      aspect-ratio:1;
+      border-radius:999px;
+      background:
+        radial-gradient(circle at 34% 28%, rgba(255,255,255,.7), transparent 22%),
+        var(--accent);
+    }
+
+    .variant{
+      margin-top:72px;
+    }
+
+    .variant:not(.selected-metrics){
+      display:none;
+    }
+
+    .variant-note{
+      margin:0 0 18px;
+      color:var(--muted2);
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .selected-metrics{
+      margin-top:64px;
+    }
+
+    .selected-metrics .variant-note{
+      display:none;
+    }
+
+    .selected-metrics .reference-row{
+      display:none;
+    }
+
+    .prototype-label{
+      margin:0 0 18px;
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .skill-icon{
+      width:68px;
+      height:68px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      background:var(--accent);
+      color:#FFFFFF;
+    }
+
+    .skill-icon svg{
+      width:32px;
+      height:32px;
+      stroke:currentColor;
+      stroke-width:1.75;
+      fill:none;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .skill-title{
+      margin:0;
+      color:var(--text);
+      font-size:clamp(24px, 2.8vw, 34px);
+      line-height:1.28;
+      letter-spacing:-.035em;
+      font-weight:500;
+    }
+
+    .metric-row{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:0;
+      padding:2px 0 8px;
+    }
+
+    .metric-row .skill{
+      min-height:142px;
+      padding:0 48px 0 0;
+    }
+
+    .metric-row .skill + .skill{
+      padding-left:48px;
+      border-left:0;
+    }
+
+    .metric-number{
+      display:none;
+    }
+
+    .metric-row .skill-title{
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size:clamp(28px, 3vw, 40px);
+      line-height:1;
+      letter-spacing:-.055em;
+      font-weight:500;
+    }
+
+    .metric-mark{
+      display:none;
+    }
+
+    .metric-row .skill-text{
+      max-width:210px;
+      margin-top:18px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.45;
+    }
+
+    .animated-text-metrics{
+      margin-top:52px;
+      padding-top:52px;
+      border-top:1px solid var(--border);
+    }
+
+    .animated-text-metrics .skill-title{
+      color:var(--text);
+      animation:metricTitleReveal .82s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .animated-text-metrics .skill:nth-child(2) .skill-title{animation-delay:.08s}
+    .animated-text-metrics .skill:nth-child(3) .skill-title{animation-delay:.16s}
+    .animated-text-metrics .skill:nth-child(4) .skill-title{animation-delay:.24s}
+
+    .animated-text-sweep,
+    .animated-text-focus{
+      margin-top:52px;
+      padding-top:52px;
+      border-top:1px solid var(--border);
+    }
+
+    .animated-text-sweep .skill-title{
+      color:transparent;
+      background:
+        linear-gradient(
+          90deg,
+          var(--text) 0%,
+          var(--text) 30%,
+          color-mix(in srgb, var(--accent) 88%, var(--text)) 46%,
+          color-mix(in srgb, var(--accent) 72%, var(--text)) 54%,
+          var(--text) 70%,
+          var(--text) 100%
+        );
+      background-size:220% 100%;
+      background-position:100% 50%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      animation:metricTitleSweep 9.6s cubic-bezier(.2,.72,.22,1) infinite;
+    }
+
+    .animated-text-sweep .skill:nth-child(2) .skill-title{animation-delay:.62s}
+    .animated-text-sweep .skill:nth-child(3) .skill-title{animation-delay:1.24s}
+    .animated-text-sweep .skill:nth-child(4) .skill-title{animation-delay:1.86s}
+
+    .animated-text-focus .skill-title{
+      color:var(--text);
+      transform-origin:left center;
+      animation:metricTitleFocus 3.6s ease-in-out infinite;
+    }
+
+    .animated-text-focus .skill:nth-child(2) .skill-title{animation-delay:.2s}
+    .animated-text-focus .skill:nth-child(3) .skill-title{animation-delay:.4s}
+    .animated-text-focus .skill:nth-child(4) .skill-title{animation-delay:.6s}
+
+    @keyframes metricTitleReveal{
+      from{
+        opacity:0;
+        filter:blur(8px);
+        letter-spacing:.02em;
+        transform:translate3d(0, 10px, 0);
+      }
+      to{
+        opacity:1;
+        filter:blur(0);
+        letter-spacing:-.055em;
+        transform:translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes metricTitleSweep{
+      0%, 18%{
+        background-position:100% 50%;
+      }
+      68%{
+        background-position:0% 50%;
+      }
+      100%{
+        background-position:0% 50%;
+      }
+    }
+
+    @keyframes metricTitleFocus{
+      0%, 100%{
+        color:var(--text);
+        transform:translate3d(0,0,0) scale(1);
+      }
+      42%{
+        color:var(--accent);
+        transform:translate3d(0,-2px,0) scale(1.025);
+      }
+      68%{
+        color:var(--text);
+        transform:translate3d(0,0,0) scale(1);
+      }
+    }
+
+    .circle-metrics{
+      gap:28px;
+      margin-top:52px;
+      padding-top:52px;
+      border-top:1px solid var(--border);
+    }
+
+    .circle-metrics .skill{
+      min-height:auto;
+      padding-right:28px;
+    }
+
+    .circle-metrics .skill + .skill{
+      padding-left:0;
+      border-left:0;
+    }
+
+    .circle-metrics .skill-title{
+      width:92px;
+      height:92px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      background:var(--accent);
+      color:#FFFFFF;
+      font-size:clamp(24px, 2.6vw, 34px);
+      line-height:1;
+      letter-spacing:-.04em;
+      font-weight:560;
+    }
+
+    .circle-metrics .skill-text{
+      max-width:220px;
+      margin-top:22px;
+      font-size:15px;
+      line-height:1.45;
+    }
+
+    .soft-circle-metrics{
+      margin-top:52px;
+      padding-top:52px;
+      border-top:1px solid var(--border);
+    }
+
+    .soft-circle-metrics .skill-title{
+      background:var(--accent-soft);
+      color:var(--accent);
+    }
+
+    .outline-circle-metrics{
+      margin-top:52px;
+      padding-top:52px;
+      border-top:1px solid var(--border);
+    }
+
+    .outline-circle-metrics .skill-title{
+      border:1px solid var(--accent-soft);
+      background:transparent;
+      color:var(--accent);
+    }
+
+    .animated-circle-metrics{
+      margin-top:52px;
+      padding-top:52px;
+      border-top:1px solid var(--border);
+    }
+
+    .animated-circle-metrics .skill{
+      animation:metricFadeUp .72s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .animated-circle-metrics .skill:nth-child(2){animation-delay:.08s}
+    .animated-circle-metrics .skill:nth-child(3){animation-delay:.16s}
+    .animated-circle-metrics .skill:nth-child(4){animation-delay:.24s}
+
+    .animated-circle-metrics .skill-title{
+      position:relative;
+      isolation:isolate;
+      overflow:hidden;
+      background:var(--accent-soft);
+      color:var(--accent);
+    }
+
+    .animated-circle-metrics .skill-title::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      border-radius:999px;
+      border:1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+      opacity:0;
+      transform:scale(.08);
+      animation:metricRing 3.2s cubic-bezier(.22,.8,.24,1) infinite;
+    }
+
+    @keyframes metricFadeUp{
+      from{
+        opacity:0;
+        transform:translate3d(0, 14px, 0);
+      }
+      to{
+        opacity:1;
+        transform:translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes metricRing{
+      0%{
+        opacity:0;
+        transform:scale(.08);
+      }
+      14%{
+        opacity:.58;
+      }
+      72%{
+        opacity:.38;
+        transform:scale(1);
+      }
+      100%{
+        opacity:0;
+        transform:scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .animated-text-metrics .skill-title,
+      .animated-text-sweep .skill-title,
+      .animated-text-focus .skill-title,
+      .animated-circle-metrics .skill,
+      .animated-circle-metrics .skill-title::after{
+        animation:none;
+      }
+
+      .animated-text-sweep .skill-title{
+        color:var(--text);
+        background:none;
+      }
+    }
+
+    .skill-text{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.5;
+    }
+
+    /* 01 closest to reference */
+    .reference-row{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:64px;
+      padding:34px 0 18px;
+    }
+
+    .reference-row .skill-icon{
+      margin-bottom:24px;
+    }
+
+    .reference-row .skill-title{
+      max-width:260px;
+    }
+
+    /* 02 one accent */
+    .single-accent-row{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:54px;
+      padding:36px 0;
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+    }
+
+    .single-accent-row .skill{
+      --icon-bg:var(--accent);
+    }
+
+    .single-accent-row .skill-icon{
+      width:68px;
+      height:68px;
+      margin-bottom:24px;
+    }
+
+    .single-accent-row .skill-icon svg{
+      width:34px;
+      height:34px;
+    }
+
+    .single-accent-row .skill-title{
+      max-width:250px;
+      font-size:clamp(23px, 2.6vw, 32px);
+    }
+
+    /* 03 with tiny explanation */
+    .caption-row{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:54px;
+      padding:40px 0 18px;
+      border:0;
+      border-radius:0;
+      background:transparent;
+    }
+
+    .variant:nth-of-type(4) .variant-note{
+      display:none;
+    }
+
+    .caption-row .skill-icon{
+      width:70px;
+      height:70px;
+      margin-bottom:22px;
+      background:var(--accent-soft);
+      color:var(--accent);
+    }
+
+    .caption-row .skill-icon svg{
+      width:34px;
+      height:34px;
+    }
+
+    .caption-row .skill-title{
+      max-width:270px;
+      color:var(--accent);
+      font-size:clamp(26px, 3vw, 36px);
+      line-height:1.08;
+      letter-spacing:-.045em;
+      font-weight:650;
+    }
+
+    .caption-row .skill-text{
+      max-width:250px;
+      margin-top:14px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.48;
+    }
+
+    /* 04 dark calm */
+    .dark-row{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:0;
+      overflow:hidden;
+      border-radius:34px;
+      background:var(--case-dark);
+      color:#F9FAFB;
+    }
+
+    .dark-row .skill{
+      min-height:260px;
+      padding:30px;
+    }
+
+    .dark-row .skill + .skill{
+      border-left:1px solid rgba(255,255,255,.10);
+    }
+
+    .dark-row .skill-icon{
+      width:68px;
+      height:68px;
+      margin-bottom:28px;
+      background:rgba(255,255,255,.10);
+      color:#F9FAFB;
+    }
+
+    .dark-row .skill-icon svg{
+      width:34px;
+      height:34px;
+    }
+
+    .dark-row .skill-title{
+      color:#F9FAFB;
+      font-size:clamp(23px, 2.6vw, 31px);
+    }
+
+    .dark-row .skill-text{
+      max-width:240px;
+      margin-top:12px;
+      color:rgba(249,250,251,.68);
+    }
+
+    /* 05 compact */
+    .compact-row{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:22px;
+      padding:8px 0;
+    }
+
+    .compact-row .skill{
+      display:grid;
+      grid-template-columns:64px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .compact-row .skill-icon{
+      width:64px;
+      height:64px;
+    }
+
+    .compact-row .skill-icon svg{
+      width:31px;
+      height:31px;
+    }
+
+    .compact-row .skill-title{
+      font-size:clamp(22px, 2.4vw, 30px);
+      line-height:1.22;
+    }
+
+    .compact-row .skill-text{
+      margin-top:8px;
+      font-size:14px;
+    }
+
+    @media (max-width:980px){
+      .hero-preview{
+        grid-template-columns:1fr;
+      }
+
+      .hero-preview__orb{display:none}
+
+      .reference-row,
+      .metric-row,
+      .single-accent-row,
+      .caption-row,
+      .dark-row,
+      .compact-row{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+      }
+
+      .dark-row .skill + .skill{
+        border-left:0;
+      }
+
+      .metric-row .skill{
+        padding:0 34px 32px 0;
+      }
+
+      .metric-row .skill + .skill{
+        padding-left:34px;
+      }
+
+      .metric-row .skill:nth-child(3){
+        padding-left:0;
+        border-left:0;
+      }
+    }
+
+    @media (max-width:640px){
+      .page{
+        width:min(100% - 28px, 1200px);
+        padding:36px 0 64px;
+      }
+
+      .prototype-header,
+      .reference-row,
+      .metric-row,
+      .single-accent-row,
+      .caption-row,
+      .dark-row,
+      .compact-row{
+        grid-template-columns:1fr;
+      }
+
+      .theme-switch{margin-top:18px}
+      .hero-preview{padding:30px 22px;border-radius:28px}
+      .reference-row,
+      .single-accent-row{gap:34px}
+      .metric-row{gap:34px}
+      .metric-row .skill,
+      .metric-row .skill + .skill{
+        padding:0;
+        border-left:0;
+      }
+      .caption-row{padding:28px}
+      .dark-row .skill{min-height:auto}
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" aria-hidden="true" focusable="false">
+    <symbol id="icon-product" viewBox="0 0 24 24">
+      <rect x="4" y="5" width="16" height="14" rx="2.4"></rect>
+      <path d="M8 9h8M8 13h4"></path>
+      <path d="M14.5 14.5l2.5 2.5 3-4"></path>
+    </symbol>
+    <symbol id="icon-logic" viewBox="0 0 24 24">
+      <circle cx="6" cy="6" r="2"></circle>
+      <circle cx="18" cy="6" r="2"></circle>
+      <circle cx="6" cy="18" r="2"></circle>
+      <circle cx="18" cy="18" r="2"></circle>
+      <path d="M8 6h8M6 8v8M8 18h8M18 8v8"></path>
+    </symbol>
+    <symbol id="icon-system" viewBox="0 0 24 24">
+      <rect x="4" y="4" width="6" height="6" rx="1.4"></rect>
+      <rect x="14" y="4" width="6" height="6" rx="1.4"></rect>
+      <rect x="4" y="14" width="6" height="6" rx="1.4"></rect>
+      <rect x="14" y="14" width="6" height="6" rx="1.4"></rect>
+      <path d="M10 7h4M7 10v4M17 10v4M10 17h4"></path>
+    </symbol>
+    <symbol id="icon-ai" viewBox="0 0 24 24">
+      <path d="M12 3l1.6 5.1L19 10l-5.4 1.9L12 17l-1.6-5.1L5 10l5.4-1.9L12 3z"></path>
+      <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"></path>
+    </symbol>
+  </svg>
+
+  <main class="page">
+    <header class="prototype-header">
+      <div>
+        <h1>Варианты ближе к референсу</h1>
+        <p>Крупная иконка, короткий тезис, много воздуха. Каждый навык получает собственную пиктограмму.</p>
+      </div>
+      <button class="theme-switch" type="button" aria-label="Переключить тему" aria-pressed="false">
+        <span class="switch-track" aria-hidden="true">
+          <span class="switch-thumb"></span>
+        </span>
+      </button>
+    </header>
+
+    <section class="hero-preview" aria-label="Контекст первого экрана">
+      <div>
+        <p class="hero-preview__eyebrow">Привет, я Артем</p>
+        <h2>UX/UI дизайнер</h2>
+        <p class="hero-preview__scope">для сложных B2B и аналитических систем</p>
+        <p class="hero-preview__text">
+          Проектирую интерфейсы для финтеха, корпоративных и аналитических продуктов.
+          Упрощаю сложную продуктовую логику, снижаю риск ошибок и помогаю командам
+          быстрее выпускать консистентные решения.
+        </p>
+      </div>
+      <div class="hero-preview__orb" aria-hidden="true"></div>
+    </section>
+
+    <section class="variant selected-metrics">
+      <p class="variant-note">01 / ближе всего к референсу</p>
+      <div class="metric-row">
+        <article class="skill">
+          <p class="metric-number">01</p>
+          <h3 class="skill-title">B2B</h3>
+          <div class="metric-mark" aria-hidden="true"></div>
+          <p class="skill-text">Сложные продукты, роли, статусы, данные</p>
+        </article>
+        <article class="skill">
+          <p class="metric-number">02</p>
+          <h3 class="skill-title">UX</h3>
+          <div class="metric-mark" aria-hidden="true"></div>
+          <p class="skill-text">Сценарии, состояния, ошибки, крайние случаи</p>
+        </article>
+        <article class="skill">
+          <p class="metric-number">03</p>
+          <h3 class="skill-title">DS</h3>
+          <div class="metric-mark" aria-hidden="true"></div>
+          <p class="skill-text">Токены, компоненты, документация, ревью</p>
+        </article>
+        <article class="skill">
+          <p class="metric-number">04</p>
+          <h3 class="skill-title">AI</h3>
+          <div class="metric-mark" aria-hidden="true"></div>
+          <p class="skill-text">Исследования, прототипы, тексты, решения</p>
+        </article>
+      </div>
+      <div class="reference-row">
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-product"></use></svg></div>
+          <h3 class="skill-title">Проектирую сложные B2B-продукты</h3>
+        </article>
+        <article class="skill skill--logic">
+          <div class="skill-icon"><svg><use href="#icon-logic"></use></svg></div>
+          <h3 class="skill-title">Мыслю сценариями, состояниями и edge cases</h3>
+        </article>
+        <article class="skill skill--system">
+          <div class="skill-icon"><svg><use href="#icon-system"></use></svg></div>
+          <h3 class="skill-title">Развиваю дизайн-системы до внедрения</h3>
+        </article>
+        <article class="skill skill--ai">
+          <div class="skill-icon"><svg><use href="#icon-ai"></use></svg></div>
+          <h3 class="skill-title">Использую AI как усиление UX-процесса</h3>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant selected-metrics">
+      <p class="prototype-label">Анимация 1 / мягкое появление</p>
+      <div class="metric-row animated-text-metrics">
+        <article class="skill">
+          <h3 class="skill-title">B2B</h3>
+          <p class="skill-text">Сложные продукты, роли, статусы, данные</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">UX</h3>
+          <p class="skill-text">Сценарии, состояния, ошибки, крайние случаи</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">DS</h3>
+          <p class="skill-text">Токены, компоненты, документация, ревью</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">AI</h3>
+          <p class="skill-text">Исследования, прототипы, тексты, решения</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant selected-metrics">
+      <p class="prototype-label">Анимация 2.1 / мягкий проход акцента</p>
+      <div class="metric-row animated-text-sweep">
+        <article class="skill">
+          <h3 class="skill-title">B2B</h3>
+          <p class="skill-text">Сложные продукты, роли, статусы, данные</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">UX</h3>
+          <p class="skill-text">Сценарии, состояния, ошибки, крайние случаи</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">DS</h3>
+          <p class="skill-text">Токены, компоненты, документация, ревью</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">AI</h3>
+          <p class="skill-text">Исследования, прототипы, тексты, решения</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant selected-metrics">
+      <p class="prototype-label">Анимация 3 / фокус заголовка</p>
+      <div class="metric-row animated-text-focus">
+        <article class="skill">
+          <h3 class="skill-title">B2B</h3>
+          <p class="skill-text">Сложные продукты, роли, статусы, данные</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">UX</h3>
+          <p class="skill-text">Сценарии, состояния, ошибки, крайние случаи</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">DS</h3>
+          <p class="skill-text">Токены, компоненты, документация, ревью</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">AI</h3>
+          <p class="skill-text">Исследования, прототипы, тексты, решения</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant selected-metrics">
+      <div class="metric-row circle-metrics">
+        <article class="skill">
+          <h3 class="skill-title">B2B</h3>
+          <p class="skill-text">Сложные продукты, роли, статусы, данные</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">UX</h3>
+          <p class="skill-text">Сценарии, состояния, ошибки, крайние случаи</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">DS</h3>
+          <p class="skill-text">Токены, компоненты, документация, ревью</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">AI</h3>
+          <p class="skill-text">Исследования, прототипы, тексты, решения</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant selected-metrics">
+      <div class="metric-row circle-metrics soft-circle-metrics">
+        <article class="skill">
+          <h3 class="skill-title">B2B</h3>
+          <p class="skill-text">Сложные продукты, роли, статусы, данные</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">UX</h3>
+          <p class="skill-text">Сценарии, состояния, ошибки, крайние случаи</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">DS</h3>
+          <p class="skill-text">Токены, компоненты, документация, ревью</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">AI</h3>
+          <p class="skill-text">Исследования, прототипы, тексты, решения</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant selected-metrics">
+      <div class="metric-row circle-metrics outline-circle-metrics">
+        <article class="skill">
+          <h3 class="skill-title">B2B</h3>
+          <p class="skill-text">Сложные продукты, роли, статусы, данные</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">UX</h3>
+          <p class="skill-text">Сценарии, состояния, ошибки, крайние случаи</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">DS</h3>
+          <p class="skill-text">Токены, компоненты, документация, ревью</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">AI</h3>
+          <p class="skill-text">Исследования, прототипы, тексты, решения</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant selected-metrics">
+      <div class="metric-row circle-metrics animated-circle-metrics">
+        <article class="skill">
+          <h3 class="skill-title">B2B</h3>
+          <p class="skill-text">Сложные продукты, роли, статусы, данные</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">UX</h3>
+          <p class="skill-text">Сценарии, состояния, ошибки, крайние случаи</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">DS</h3>
+          <p class="skill-text">Токены, компоненты, документация, ревью</p>
+        </article>
+        <article class="skill">
+          <h3 class="skill-title">AI</h3>
+          <p class="skill-text">Исследования, прототипы, тексты, решения</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant">
+      <p class="variant-note">02 / один акцентный цвет</p>
+      <div class="single-accent-row">
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-product"></use></svg></div>
+          <h3 class="skill-title">Распутываю сложную продуктовую логику</h3>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-logic"></use></svg></div>
+          <h3 class="skill-title">Проектирую сценарии, а не набор экранов</h3>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-system"></use></svg></div>
+          <h3 class="skill-title">Собираю интерфейсы в систему</h3>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-ai"></use></svg></div>
+          <h3 class="skill-title">Ускоряю работу через AI-инструменты</h3>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant">
+      <p class="variant-note">03 / с коротким пояснением</p>
+      <div class="caption-row">
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-product"></use></svg></div>
+          <h3 class="skill-title">Сложные продукты и логика</h3>
+          <p class="skill-text">B2B, финтех, внутренние системы, админки, дашборды.</p>
+        </article>
+        <article class="skill skill--logic">
+          <div class="skill-icon"><svg><use href="#icon-logic"></use></svg></div>
+          <h3 class="skill-title">Сценарное UX-мышление</h3>
+          <p class="skill-text">Состояния, ошибки, роли, права и edge cases.</p>
+        </article>
+        <article class="skill skill--system">
+          <div class="skill-icon"><svg><use href="#icon-system"></use></svg></div>
+          <h3 class="skill-title">Дизайн-системы</h3>
+          <p class="skill-text">Компоненты, токены, документация, дизайн-ревью.</p>
+        </article>
+        <article class="skill skill--ai">
+          <div class="skill-icon"><svg><use href="#icon-ai"></use></svg></div>
+          <h3 class="skill-title">AI как усиление</h3>
+          <p class="skill-text">Ресерч, прототипы, визуалы и документация.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant">
+      <p class="variant-note">04 / тёмная технологичная полоса</p>
+      <div class="dark-row">
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-product"></use></svg></div>
+          <h3 class="skill-title">Сложные продукты и логика</h3>
+          <p class="skill-text">Рабочие интерфейсы для B2B, финтеха и внутренних систем.</p>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-logic"></use></svg></div>
+          <h3 class="skill-title">Сценарное UX-мышление</h3>
+          <p class="skill-text">Flow, состояния, ошибки и пограничные сценарии.</p>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-system"></use></svg></div>
+          <h3 class="skill-title">Дизайн-системы и реализация</h3>
+          <p class="skill-text">От компонентов и токенов до ревью и внедрения.</p>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-ai"></use></svg></div>
+          <h3 class="skill-title">AI как усиление процесса</h3>
+          <p class="skill-text">Быстрее искать решения, не заменяя UX-мышление.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="variant">
+      <p class="variant-note">05 / выбранное направление, доработка</p>
+      <div class="compact-row">
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-product"></use></svg></div>
+          <div><h3 class="skill-title">B2B-продукты</h3><p class="skill-text">Логика, роли, статусы, права.</p></div>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-logic"></use></svg></div>
+          <div><h3 class="skill-title">UX-сценарии</h3><p class="skill-text">Flow, состояния, edge cases.</p></div>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-system"></use></svg></div>
+          <div><h3 class="skill-title">Design System</h3><p class="skill-text">Компоненты, токены, ревью.</p></div>
+        </article>
+        <article class="skill">
+          <div class="skill-icon"><svg><use href="#icon-ai"></use></svg></div>
+          <div><h3 class="skill-title">AI</h3><p class="skill-text">Ресерч, прототипы, документация.</p></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const themeBtn = document.querySelector(".theme-switch");
+
+      function safeStorageGet(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function safeStorageSet(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch (error) {
+          /* Theme persistence is optional for the prototype. */
+        }
+      }
+
+      function getPreferredTheme() {
+        const saved = safeStorageGet("theme");
+
+        if (saved === "light" || saved === "dark") {
+          return saved;
+        }
+
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        return prefersDark ? "dark" : "light";
+      }
+
+      function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        safeStorageSet("theme", theme);
+
+        if (themeBtn) {
+          themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
+        }
+      }
+
+      applyTheme(getPreferredTheme());
+
+      if (themeBtn) {
+        themeBtn.addEventListener("click", function () {
+          const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+          applyTheme(current === "dark" ? "light" : "dark");
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
