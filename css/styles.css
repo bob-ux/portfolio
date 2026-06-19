@@ -363,7 +363,7 @@ html[data-theme="dark"] .navlinks a:hover{
    06. Header controls
 ========================================================= */
 .theme-switch{
-  width:56px;
+  width:40px;
   height:40px;
   display:inline-flex;
   align-items:center;
@@ -393,48 +393,36 @@ html[data-theme="dark"] .navlinks a:hover{
 
 .theme-switch .switch-track{
   position:relative;
-  width:48px;
-  height:24px;
+  width:20px;
+  height:20px;
   border-radius:999px;
-  background:rgba(17,24,39,.06);
-  border:1px solid rgba(17,24,39,.10);
-  transition:background-color .22s ease, border-color .22s ease, box-shadow .22s ease;
+  background:var(--card-strong);
+  transform:scale(1);
+  transition:
+    transform .28s cubic-bezier(.2,.85,.2,1.15),
+    background-color .22s ease;
+}
+
+.theme-switch .switch-track::after{
+  content:"";
+  position:absolute;
+  inset:-15% -40% -15% 40%;
+  border-radius:999px;
+  background:var(--card);
+  opacity:0;
+  transition:opacity .22s ease, background-color .22s ease;
 }
 
 html[data-theme="dark"] .theme-switch .switch-track{
-  background:rgba(255,255,255,.10);
-  border-color:rgba(255,255,255,.16);
+  transform:scale(.82);
+}
+
+html[data-theme="dark"] .theme-switch .switch-track::after{
+  opacity:1;
 }
 
 .theme-switch .switch-thumb{
-  position:absolute;
-  top:50%;
-  left:2px;
-  width:20px;
-  height:20px;
-  border:1px solid var(--border);
-  border-radius:999px;
-  background:var(--bg);
-  box-shadow:0 6px 14px rgba(0,0,0,.12);
-  transform:translate3d(0,-50%,0);
-  transition:
-    transform .28s cubic-bezier(.2,.85,.2,1.15),
-    background-color .22s ease,
-    border-color .22s ease,
-    box-shadow .22s ease;
-}
-
-html[data-theme="dark"] .theme-switch .switch-thumb{
-  transform:translate3d(24px,-50%,0);
-  box-shadow:0 10px 22px rgba(0,0,0,.35);
-}
-
-.theme-switch:hover .switch-track{
-  box-shadow:inset 0 0 0 999px color-mix(in srgb, var(--accent) 4%, transparent);
-}
-
-html[data-theme="dark"] .theme-switch:hover .switch-track{
-  box-shadow:inset 0 0 0 999px rgba(255,255,255,.05);
+  display:none;
 }
 
 .menu-toggle{
