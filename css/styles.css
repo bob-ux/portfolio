@@ -2057,7 +2057,7 @@ html[data-theme="dark"] .toc a.active{
 
 .about-process__item h3{
   margin:0 0 5px;
-  font-size:19px;
+  font-size:17px;
   line-height:1.25;
   letter-spacing:0;
 }
@@ -2938,7 +2938,7 @@ html[data-theme="dark"] .back-to-top:hover{
   }
 
   .about-process__item h3{
-    font-size:18px;
+    font-size:16px;
   }
 
   .about-process__item p{
