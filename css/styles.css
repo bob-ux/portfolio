@@ -363,23 +363,24 @@ html[data-theme="dark"] .navlinks a:hover{
    06. Header controls
 ========================================================= */
 .theme-switch{
-  width:40px;
-  height:40px;
+  width:32px;
+  height:32px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  border:1px solid var(--border);
+  border:1px solid transparent;
   border-radius:999px;
-  background:var(--card);
-  box-shadow:0 1px 0 rgba(16,24,40,.04);
+  background:transparent;
+  box-shadow:none;
   cursor:pointer;
   transition:transform .18s ease, box-shadow .18s ease, border-color .22s ease, background-color .22s ease;
 }
 
 .theme-switch:hover{
   transform:translateY(-1px);
-  box-shadow:var(--shadow-base);
-  border-color:var(--border2);
+  box-shadow:none;
+  border-color:transparent;
+  background:transparent;
 }
 
 .theme-switch:active{
@@ -393,8 +394,8 @@ html[data-theme="dark"] .navlinks a:hover{
 
 .theme-switch .switch-track{
   position:relative;
-  width:20px;
-  height:20px;
+  width:16px;
+  height:16px;
   border-radius:999px;
   background:var(--card-strong);
   transform:scale(1);
