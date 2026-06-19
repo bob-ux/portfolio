@@ -2010,8 +2010,13 @@ html[data-theme="dark"] .toc a.active{
   align-items:start;
 }
 
+.about-text,
+.about-process{
+  align-self:start;
+}
+
 .about-text h2{
-  margin-bottom:16px;
+  margin:0 0 16px;
 }
 
 .about-text p{
