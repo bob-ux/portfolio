@@ -3151,17 +3151,17 @@ html[data-theme="dark"] .back-to-top:hover{
 .contact-card {
   display:grid;
   grid-template-columns:minmax(0, 1fr) minmax(
-    calc(var(--space-8) + var(--space-8)),
-    calc(var(--space-8) + var(--space-8) + var(--space-8))
+    calc(var(--space-8) + var(--space-6)),
+    calc(var(--space-8) + var(--space-7) + var(--space-3))
   );
   align-items:center;
-  gap:clamp(var(--space-4), 7vw, calc(var(--space-7) + var(--space-2)));
+  gap:clamp(var(--space-4), 5vw, var(--space-7));
   width:min(100%, calc(var(--container) - var(--space-7) - var(--space-8)));
-  min-height:calc(var(--space-8) + var(--space-8) + var(--space-8));
+  min-height:calc(var(--space-8) + var(--space-8) + var(--space-4));
   margin:0 auto;
-  padding:clamp(var(--space-5), 6vw, var(--space-7)) clamp(var(--space-5), 7vw, var(--space-7));
+  padding:var(--space-5) clamp(var(--space-5), 6vw, var(--space-7));
   overflow:hidden;
-  border-radius:calc(var(--space-8) + var(--space-8));
+  border-radius:var(--radius);
   background:var(--card-muted);
 }
 
@@ -3180,9 +3180,9 @@ html[data-theme="dark"] .back-to-top:hover{
 .contact-card__photo{
   justify-self:end;
   width:clamp(
-    calc(var(--space-8) + var(--space-7)),
+    calc(var(--space-8) + var(--space-5)),
     27vw,
-    calc(var(--space-8) + var(--space-8) + var(--space-8))
+    calc(var(--space-8) + var(--space-8) + var(--space-4))
   );
   aspect-ratio:1;
   overflow:hidden;
