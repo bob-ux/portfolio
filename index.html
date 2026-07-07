@@ -483,6 +483,25 @@
 </div>
 
 <script src="/js/app.js"></script>
+<script>
+  (() => {
+    const MAX_BACK_TO_TOP_BOTTOM = 96;
+
+    function keepBackToTopVisible() {
+      const button = document.querySelector(".back-to-top");
+      if (!button) return;
+
+      const currentBottom = parseFloat(button.style.bottom);
+      if (Number.isFinite(currentBottom) && currentBottom > MAX_BACK_TO_TOP_BOTTOM) {
+        button.style.bottom = `${MAX_BACK_TO_TOP_BOTTOM}px`;
+      }
+    }
+
+    window.addEventListener("scroll", keepBackToTopVisible, { passive: true });
+    window.addEventListener("resize", keepBackToTopVisible);
+    keepBackToTopVisible();
+  })();
+</script>
 <script src="/js/site-consent.js"></script>
 </body>
 </html>
