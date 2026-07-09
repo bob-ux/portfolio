@@ -39,6 +39,8 @@
   const isOtherProjectsPage =
     pathname === "/other-projects/" || pathname === "/other-projects.html";
 
+  document.body.classList.toggle("is-home-page", isHomePage);
+
   // 2) Footer year
   const y = document.getElementById("y");
   if (y) y.textContent = new Date().getFullYear();
@@ -242,6 +244,84 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
   }
+
+  // 6.1) Home portrait to header transition
+  (function initHomeHeroPortrait() {
+    if (!isHomePage) return;
+
+    const portrait = document.querySelector("[data-hero-portrait]");
+    const header = document.querySelector(".site-header");
+    const brandLogo = document.querySelector(".brand-logo");
+
+    if (!portrait || !header || !brandLogo) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const MAX_SCROLL = 420;
+    const HEADER_REVEAL_START = 0.14;
+    let frame = null;
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function smoothstep(value) {
+      return value * value * (3 - 2 * value);
+    }
+
+    function measure() {
+      const portraitBase = portrait.parentElement || portrait;
+      const portraitRect = portraitBase.getBoundingClientRect();
+      const logoRect = brandLogo.getBoundingClientRect();
+
+      const portraitCenterX = portraitRect.left + portraitRect.width / 2;
+      const portraitCenterY = portraitRect.top + portraitRect.height / 2;
+      const logoCenterX = logoRect.left + logoRect.width / 2;
+      const logoCenterY = logoRect.top + logoRect.height / 2;
+      const scale = logoRect.width / portrait.offsetWidth;
+
+      return {
+        x: logoCenterX - portraitCenterX,
+        y: logoCenterY - portraitCenterY,
+        scale,
+      };
+    }
+
+    function render() {
+      frame = null;
+
+      const progress = reduceMotion.matches ? 1 : clamp(window.scrollY / MAX_SCROLL, 0, 1);
+      const eased = smoothstep(progress);
+      const headerProgress = smoothstep(
+        clamp((progress - HEADER_REVEAL_START) / (1 - HEADER_REVEAL_START), 0, 1)
+      );
+      const target = measure();
+
+      portrait.style.setProperty("--hero-photo-x", `${target.x * eased}px`);
+      portrait.style.setProperty("--hero-photo-y", `${target.y * eased}px`);
+      portrait.style.setProperty("--hero-photo-scale", 1 + (target.scale - 1) * eased);
+      portrait.style.opacity = String(clamp(1 - smoothstep(clamp(progress * 1.08, 0, 1)), 0, 1));
+
+      header.style.opacity = String(headerProgress);
+      header.style.transform = `translateY(${(1 - headerProgress) * -10}px)`;
+      header.style.pointerEvents = headerProgress > 0.08 ? "" : "none";
+
+      document.body.classList.toggle("is-hero-top", progress < HEADER_REVEAL_START);
+    }
+
+    function schedule() {
+      if (frame) return;
+      frame = requestAnimationFrame(render);
+    }
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+
+    if (reduceMotion.addEventListener) {
+      reduceMotion.addEventListener("change", schedule);
+    }
+
+    render();
+  })();
 
   // 7) Back to top
   (function initBackToTop() {
