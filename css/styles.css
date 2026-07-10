@@ -1473,7 +1473,7 @@ html[data-theme="dark"] .featured-case{
 .other-project-card__title{
   margin:0 0 18px;
   max-width:13ch;
-  font-family:ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  font-family:inherit;
   font-size:clamp(28px, 2.8vw, 36px);
   line-height:1.08;
   letter-spacing:-.045em;
